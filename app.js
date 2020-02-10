@@ -6,10 +6,8 @@ const routes = require('./routes');
 
 
 const app = express();
-const port = 3001;
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(port, '/', routes);
-
+app.use('/', routes);
 module.exports = app;

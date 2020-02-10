@@ -6,4 +6,4 @@ router.post('/login', (req, res) => {
   res.send('LOGGING IN');
 });
 
-module.export = router;
+module.exports = router;
