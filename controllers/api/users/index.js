@@ -1,10 +1,10 @@
 const express = require('express');
-
+const userService = require('../../../services/UserService');
 
 const router = express.Router();
 
 router.post('/register', (req, res) => {
-  res.send('LOGGING IN');
+  userService.create(req, res);
 });
 
 module.exports = router;
