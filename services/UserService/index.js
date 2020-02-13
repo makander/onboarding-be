@@ -26,14 +26,30 @@ const get = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const Id = req.params.id;
-  const userProps = req.body;
   try {
-    const result = await User.findOne({
+    const { id } = req.params;
+    const {
+      email, password, firstName, lastName,
+    } = req.body;
+
+    await User.update({
+      email, password, firstName, lastName,
+    }, {
       where: {
-        id: Id,
+        id,
+      },
+      returning: true,
+      plain: true,
+    });
+
+    const updatedUser = await User.findOne({
+      where: {
+        id,
       },
     });
+
+
+    res.send(updatedUser);
   } catch (error) {
     console.log(error);
   }
