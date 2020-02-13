@@ -1,12 +1,11 @@
-'use strict';
+
 module.exports = (sequelize, DataTypes) => {
-  const Task = sequelize.define('Task', {
+  const List = sequelize.define('List', {
     name: DataTypes.STRING,
     state: DataTypes.BOOLEAN,
-    description: DataTypes.TEXT
   }, {});
-  Task.associate = function(models) {
+  List.associate = function (models) {
     // associations can be defined here
   };
-  return Task;
+  return List;
 };

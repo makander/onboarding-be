@@ -1,12 +1,14 @@
 
-const Sequelize = require('sequelize');
-const db = require('../services/Database/');
-
-const User = db.define('user', {
-  firstName: { type: Sequelize.STRING },
-  lastName: { type: Sequelize.STRING },
-  email: { type: Sequelize.STRING },
-  password: { type: Sequelize.STRING },
-});
-
-module.exports = User;
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    password: DataTypes.STRING,
+    email: DataTypes.STRING,
+    role: DataTypes.ENUM('Admin', 'Guest'),
+  }, {});
+  User.associate = function (models) {
+    // associations can be defined here
+  };
+  return User;
+};
