@@ -48,7 +48,6 @@ const update = async (req, res) => {
       },
     });
 
-
     res.send(updatedUser);
   } catch (error) {
     console.log(error);
@@ -56,9 +55,14 @@ const update = async (req, res) => {
 };
 
 const destroy = async (req, res) => {
-  const userProps = req.body;
   try {
-    await User.destroy();
+    const { id } = req.params;
+    await User.destroy({
+      where: {
+        id,
+      },
+    });
+    res.status(200).send('User destroyed');
   } catch (error) {
     console.log(error);
   }
