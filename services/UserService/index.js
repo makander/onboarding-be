@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../../models/');
 
+
 const create = async (req, res) => {
   const userProps = req.body;
   console.log(req.body);
@@ -12,15 +13,15 @@ const create = async (req, res) => {
 };
 
 const get = async (req, res) => {
-  const { email, password } = req.body;
-  console.log(email);
   try {
-    const user = await User.findOne({
-      where: {
-        email,
-      },
+    const { email, password } = req.body;
+
+    User.findOne({ where: { email } }).then(async (user) => {
+      if (await user.validPassword(password)) {
+        return res.send('logged in');
+      }
+      return res.send('password not valid');
     });
-    res.send(user);
   } catch (error) {
     console.log(error);
   }
