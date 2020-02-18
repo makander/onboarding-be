@@ -9,7 +9,8 @@ router.post('/register', (req, res) => {
   userService.create(req, res);
 });
 
-router.post('/login',
+router.post(
+  '/login',
   passport.authenticate('local', { session: false }),
   (req, res) => {
     const returnedUser = {
@@ -21,17 +22,24 @@ router.post('/login',
     };
     const token = jwt.sign(req.user.id, process.env.JWT_SECRET);
     res.json({ success: true, token, returnedUser });
-  });
+  },
+);
 
-router.get('/profile',
-  passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get(
+  '/profile',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
     res.json('authenticated');
-  });
+  },
+);
 
-
-router.put('/update/:id', (req, res) => {
-  userService.update(req, res);
-});
+router.put(
+  '/update/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    userService.update(req, res);
+  },
+);
 
 router.delete('/delete/:id', (req, res) => {
   userService.destroy(req, res);

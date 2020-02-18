@@ -7,35 +7,24 @@ const create = async (req, res) => {
     await User.create(userProps).then(() => res.status(200).send('user created'));
   } catch (error) {
     console.log(error);
+    res.json(error);
   }
 };
 
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      email, password, firstName, lastName,
-    } = req.body;
-
-    await User.update({
-      email, password, firstName, lastName,
-    }, {
-      where: {
-        id,
-      },
+    const user = await User.findOne({ where: { id } });
+    const updateUser = await user.update(req.body, {
       returning: true,
       plain: true,
     });
-
-    const updatedUser = await User.findOne({
-      where: {
-        id,
-      },
-    });
-
-    res.send(updatedUser);
+    console.log(user);
+    console.log(updateUser);
+    res.send(updateUser);
   } catch (error) {
     console.log(error);
+    res.json(error);
   }
 };
 
