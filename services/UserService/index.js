@@ -1,27 +1,10 @@
-const jwt = require('jsonwebtoken');
 const { User } = require('../../models/');
-
 
 const create = async (req, res) => {
   const userProps = req.body;
   console.log(req.body);
   try {
     await User.create(userProps).then(() => res.status(200).send('user created'));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const get = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    User.findOne({ where: { email } }).then(async (user) => {
-      if (await user.validPassword(password)) {
-        return res.send(user);
-      }
-      return res.send('password not valid');
-    });
   } catch (error) {
     console.log(error);
   }
@@ -72,7 +55,6 @@ const destroy = async (req, res) => {
 
 module.exports = {
   create,
-  get,
   update,
   destroy,
 };
