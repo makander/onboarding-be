@@ -18,7 +18,7 @@ const get = async (req, res) => {
 
     User.findOne({ where: { email } }).then(async (user) => {
       if (await user.validPassword(password)) {
-        return res.send('logged in');
+        return res.send(user);
       }
       return res.send('password not valid');
     });
