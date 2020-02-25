@@ -1,17 +1,23 @@
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Lists', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('TemplateLists', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
+    userId: {
+      type: Sequelize.INTEGER,
+    },
+    description: {
+      type: Sequelize.TEXT,
+    },
+    listID: {
+      type: Sequelize.INTEGER,
+    },
     name: {
       type: Sequelize.STRING,
-    },
-    state: {
-      type: Sequelize.BOOLEAN,
     },
     createdAt: {
       allowNull: false,
@@ -22,5 +28,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Lists'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('TemplateLists'),
 };

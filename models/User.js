@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       email: DataTypes.STRING,
       role: DataTypes.ENUM('Admin', 'Guest'),
+      departmentId: DataTypes.INTEGER,
     },
     {},
   );
@@ -29,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = function (models) {
     // associations can be defined here
+    User.belongsToMany(models.List, { through: 'UserList' });
+    User.belongsToMany(models.Task, { through: 'UserTask' });
+    User.belongsToMany(models.Department, { through: 'UserDepartment', foreignKey: 'userId' });
   };
   return User;
 };

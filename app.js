@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const routes = require('./routes');
+
 require('./config/passport')(passport);
 
 const app = express();
