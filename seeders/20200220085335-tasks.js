@@ -13,7 +13,7 @@ module.exports = {
     description: 'Glöm inte att beställa en tårta till Kalle',
     createdAt: new Date(),
     updatedAt: new Date(),
-    userId: 1,
+    listId: 1,
   },
   {
     name: 'Beställ dator',
@@ -21,7 +21,7 @@ module.exports = {
     description: 'Beställ en dator',
     createdAt: new Date(),
     updatedAt: new Date(),
-    userId: 2,
+    listId: 2,
   },
   {
     name: 'Radera dator',

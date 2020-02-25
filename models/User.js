@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     User.belongsToMany(models.List, { through: 'UserList' });
     User.belongsToMany(models.Task, { through: 'UserTask' });
-    User.belongsToMany(models.Department, { through: 'UserDepartment', foreignKey: 'userId' });
+    User.belongsToMany(models.Department, { through: 'UserDepartment' });
   };
   return User;
 };
