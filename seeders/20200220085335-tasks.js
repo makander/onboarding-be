@@ -14,6 +14,7 @@ module.exports = {
     createdAt: new Date(),
     updatedAt: new Date(),
     listId: 1,
+    UserId: 1,
   },
   {
     name: 'Beställ dator',
@@ -29,6 +30,14 @@ module.exports = {
     description: 'Kasta allt på datorn.',
     createdAt: new Date(),
     updatedAt: new Date(),
+  }, {
+    name: 'Städa skrivbordet',
+    status: false,
+    description: 'Städa skrivbordet som Kalle ska sitta på, det finns på plan 4:a',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    listId: 1,
+    UserId: 1,
   }], {}),
 
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Tasks', null, {}),

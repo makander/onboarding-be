@@ -1,10 +1,8 @@
 const express = require('express');
-
 const { User } = require('../../../models/');
-const { Task } = require('../../../models/');
+const { List } = require('../../../models/');
 
 const router = express.Router({ mergeParams: true });
-
 
 router.get('/', (req, res) => {
   // res.send('on the user task route');
@@ -14,21 +12,11 @@ router.get('/', (req, res) => {
   // console.log(req.params);
   User.findAll({
     include: [{
-      model: Task,
+      model: List,
       // attributes: ['id', 'name'],
     }],
     where: { id },
   }).then((data) => res.json(data));
 });
-
-const getTasks = () => { };
-
-const getTask = () => {};
-
-const getLists = () => {
-
-};
-
-const getList = () => {};
 
 module.exports = router;

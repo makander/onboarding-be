@@ -12,6 +12,8 @@ module.exports = {
       email: DataTypes.STRING,
       role: DataTypes.ENUM('Admin', 'Guest'),
       departmentId: DataTypes.INTEGER,
+       taskId: DataTypes.INTEGER,
+      listId: DataTypes.INTEGER,
     },
  */
     queryInterface.bulkInsert('Users', [{
@@ -22,6 +24,7 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       departmentId: 1,
+      listId: 1,
     }, {
       firstName: 'Lisa',
       lastName: 'Svensson',
@@ -30,6 +33,7 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       departmentId: 1,
+      listId: 1,
 
     }, {
       firstName: 'Brue',
