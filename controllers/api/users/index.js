@@ -26,7 +26,7 @@ router.post(
 );
 
 router.get(
-  '/profile',
+  '/profile/:id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     res.json('authenticated');
