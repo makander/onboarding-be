@@ -1,22 +1,13 @@
 const express = require('express');
-const { User } = require('../../../models/');
-const { List } = require('../../../models/');
+
+const listService = require('../../../services/ListService');
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/', (req, res) => {
-  // res.send('on the user task route');
-  // User.findOne({ where: { id } });
-  // res.send('on task controller again');
-  const { id } = req.params;
-  // console.log(req.params);
-  User.findAll({
-    include: [{
-      model: List,
-      // attributes: ['id', 'name'],
-    }],
-    where: { id },
-  }).then((data) => res.json(data));
-});
+router.get('/', (req, res) => listService.list(req, res));
+router.post('/', (req, res) => listService.create(req, res));
+router.delete('/:id', (req, res) => listService.destroy(req, res));
+router.put('/:id', (req, res) => listService.update(req, res));
+router.get('/:id', (req, res) => listService.get(req, res));
 
 module.exports = router;

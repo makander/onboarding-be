@@ -8,7 +8,8 @@ const departmentController = require('../controllers/api/departments');
 const listController = require('../controllers/api/lists');
 
 router.use('/api/user', userController);
-router.use('/api/user/:id/task', taskController);
+
+// router.use('/api/user/:id/task', taskController);
 
 router.use('/api/list', listController);
 

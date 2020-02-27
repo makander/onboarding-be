@@ -1,34 +1,13 @@
 const express = require('express');
 
-const { User } = require('../../../models/');
-const { Task } = require('../../../models/');
+const taskService = require('../../../services/TaskService');
 
 const router = express.Router({ mergeParams: true });
 
-
-router.get('/', (req, res) => {
-  // res.send('on the user task route');
-  // User.findOne({ where: { id } });
-  // res.send('on task controller again');
-  const { id } = req.params;
-  // console.log(req.params);
-  User.findAll({
-    include: [{
-      model: Task,
-      // attributes: ['id', 'name'],
-    }],
-    where: { id },
-  }).then((data) => res.json(data));
-});
-
-const getTasks = () => { };
-
-const getTask = () => {};
-
-const getLists = () => {
-
-};
-
-const getList = () => {};
+router.get('/', (req, res) => taskService.list(req, res));
+router.post('/', (req, res) => taskService.create(req, res));
+router.delete('/:id', (req, res) => taskService.destroy(req, res));
+router.put('/:id', (req, res) => taskService.update(req, res));
+router.get('/:id', (req, res) => taskService.get(req, res));
 
 module.exports = router;
