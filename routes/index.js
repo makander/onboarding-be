@@ -9,9 +9,11 @@ const listController = require('../controllers/api/lists');
 
 router.use('/api/user', userController);
 
-// router.use('/api/user/:id/task', taskController);
+router.use('/api/user/:id/task', taskController);
 
-router.use('/api/list', listController);
+router.use('/api/user/:id/list', listController);
+
+// router.use('/api/list', listController);
 
 router.use('/api/task', taskController);
 

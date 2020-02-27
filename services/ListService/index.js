@@ -1,20 +1,18 @@
 const { List } = require('../../models');
+const { User } = require('../../models');
 
 const create = async (req, res) => {
   try {
+    const { id } = req.params;
     const listProps = req.body;
-    await List.create(listProps);
-    res.status(200).send('List Created');
-  } catch (error) {
-    res.json(error);
-  }
-};
 
-const list = async (req, res) => {
-  try {
-    const allLists = await List.findAll({});
+    const user = await User.findOne({ where: { id } });
 
-    res.json(allLists);
+    const newList = await List.create(listProps);
+
+    const result = await newList.addUser(user, { through: { UserList: id } });
+
+    res.status(200).send(result);
   } catch (error) {
     res.json(error);
   }
@@ -28,6 +26,24 @@ const get = async (req, res) => {
     });
 
     res.json(list);
+  } catch (error) {
+    res.json(error);
+  }
+};
+
+const list = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const lists = await List.findAll({
+      include: [
+        {
+          model: User,
+          where: { id },
+        },
+      ],
+    });
+
+    res.json(lists);
   } catch (error) {
     res.json(error);
   }

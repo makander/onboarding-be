@@ -23,8 +23,7 @@ module.exports = {
       email: 'john@doe.com',
       createdAt: new Date(),
       updatedAt: new Date(),
-      departmentId: 1,
-      listId: 1,
+
     }, {
       firstName: 'Lisa',
       lastName: 'Svensson',
@@ -32,8 +31,7 @@ module.exports = {
       email: 'Lisa@Svensson.com',
       createdAt: new Date(),
       updatedAt: new Date(),
-      departmentId: 1,
-      listId: 1,
+
 
     }, {
       firstName: 'Brue',
@@ -42,7 +40,7 @@ module.exports = {
       email: 'ninja@nunchuck.com',
       createdAt: new Date(),
       updatedAt: new Date(),
-      departmentId: 3,
+
     }, {
       firstName: 'Anna',
       lastName: 'Karlsson',
@@ -50,7 +48,7 @@ module.exports = {
       email: 'Anna@Karlsson.com',
       createdAt: new Date(),
       updatedAt: new Date(),
-      departmentId: 2,
+
 
     }, {
       firstName: 'Fred',
@@ -60,7 +58,6 @@ module.exports = {
       role: 'admin',
       createdAt: new Date(),
       updatedAt: new Date(),
-      departmentId: 2,
 
 
     }], {}),
