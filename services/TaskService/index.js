@@ -1,9 +1,18 @@
 const { Task } = require('../../models');
+const { List } = require('../../models');
+const { User } = require('../../models');
+const { Department } = require('../../models');
 
 const create = async (req, res) => {
   try {
+    const { id } = req.params;
     const taskProps = req.body;
-    await Task.create(taskProps);
+
+    const list = await List.findOne({ where: { id } });
+
+    const newTask = await list.createTask(taskProps);
+
+    res.status(200).send(newTask);
     res.status(200).send('Task Created');
   } catch (error) {
     res.json(error);

@@ -28,6 +28,7 @@ const update = async (req, res) => {
   }
 };
 
+
 const destroy = async (req, res) => {
   try {
     const { id } = req.params;
@@ -36,7 +37,7 @@ const destroy = async (req, res) => {
         id,
       },
     });
-    res.status(200).send('User destroyed');
+    res.status(200).send('User deleted');
   } catch (error) {
     console.log(error);
   }

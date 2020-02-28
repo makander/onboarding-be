@@ -15,10 +15,9 @@ router.use('/api/user/:id/list', listController);
 
 // router.use('/api/list', listController);
 
-router.use('/api/task', taskController);
+router.use('/api/list/:id/task', taskController);
 
 router.use('/api/departments', departmentController);
 
-router.use('/api/user/:id/list', listController);
 
 module.exports = router;

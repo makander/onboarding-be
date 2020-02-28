@@ -1,5 +1,6 @@
 const { List } = require('../../models');
 const { User } = require('../../models');
+const { Task } = require('../../models');
 
 const create = async (req, res) => {
   try {
@@ -7,9 +8,7 @@ const create = async (req, res) => {
     const listProps = req.body;
 
     const user = await User.findOne({ where: { id } });
-
     const newList = await List.create(listProps);
-
     const result = await newList.addUser(user, { through: { UserList: id } });
 
     res.status(200).send(result);
@@ -22,7 +21,12 @@ const get = async (req, res) => {
   try {
     const { id } = req.params;
     const list = await List.findOne({
-      where: { id },
+      include: [
+        {
+          model: Task,
+          where: { listId: id },
+        },
+      ],
     });
 
     res.json(list);
@@ -51,15 +55,18 @@ const list = async (req, res) => {
 
 const update = async (req, res) => {
   try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
+    console.log(user);
     const { id } = req.params;
-    const dep = await List.findOne({
-      where: { id },
-    });
 
-    const updateList = await dep.update(req.body, {
-      returning: true,
-      plain: true,
+    const list = await List.findOne({
+      where: { id },
+      include: User,
     });
+    console.log(list);
+
+    const updateList = await list.addUsers([user]);
 
     res.send(updateList);
   } catch (error) {
