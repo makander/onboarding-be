@@ -9,8 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       password: DataTypes.STRING,
-      email: DataTypes.STRING,
+      email: { type: DataTypes.STRING, unique: true },
       role: DataTypes.ENUM('Admin', 'Guest'),
+      departmentId: DataTypes.INTEGER,
+      listId: DataTypes.INTEGER,
     },
     {},
   );
@@ -29,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = function (models) {
     // associations can be defined here
+    User.belongsToMany(models.List, { through: 'UserList' });
+    // User.belongsToMany(models.Task, { through: 'UserTask', foreignKey: 'taskId' });
+    User.hasMany(models.Task);
+    User.belongsToMany(models.Department, { through: 'UserDepartment' });
   };
   return User;
 };

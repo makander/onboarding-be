@@ -20,13 +20,22 @@ router.post(
       firstName: req.user.firstName,
       lastName: req.user.lastName,
     };
-    const token = jwt.sign(req.user.id, process.env.JWT_SECRET);
-    res.json({ success: true, token, returnedUser });
+    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET);
+    // res.send({ success: true, returnedUser });
+
+    // console.log(req.headers);
+
+    res.cookie('borderToken', token, {
+      maxAge: new Date(Date.now() + 43200000),
+      httpOnly: true,
+    });
+
+    res.send({ success: true, returnedUser });
   },
 );
 
 router.get(
-  '/profile',
+  '/profile/:id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     res.json('authenticated');

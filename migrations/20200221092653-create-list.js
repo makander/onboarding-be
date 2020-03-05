@@ -1,21 +1,27 @@
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Tasks', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Lists', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    state: {
-      type: Sequelize.BOOLEAN,
-    },
     description: {
       type: Sequelize.TEXT,
+    },
+    name: {
+      type: Sequelize.STRING,
+    },
+    status: {
+      type: Sequelize.BOOLEAN,
+    },
+    departmentId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Departments',
+        key: 'id',
+      },
     },
     createdAt: {
       allowNull: false,
@@ -26,5 +32,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Tasks'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Lists'),
 };
