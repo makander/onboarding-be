@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 
 const router = express.Router();
 
@@ -9,15 +10,13 @@ const listController = require('../controllers/api/lists');
 
 router.use('/api/user', userController);
 
-router.use('/api/user/:id/task', taskController);
+router.use('/api/task', taskController);
 
-router.use('/api/user/:id/list', listController);
-
-// router.use('/api/list', listController);
+router.use('/api/list', passport.authenticate('jwt', { session: false, assignProperty: 'userId' }), listController);
 
 router.use('/api/list/:id/task', taskController);
 
-router.use('/api/departments', departmentController);
+// router.use('/api/departments', departmentController);
 
 
 module.exports = router;

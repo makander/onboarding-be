@@ -4,7 +4,7 @@ const { Task } = require('../../models');
 
 const create = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.userId;
     const listProps = req.body;
 
     const user = await User.findOne({ where: { id } });
@@ -20,11 +20,11 @@ const create = async (req, res) => {
 const get = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id);
     const list = await List.findOne({
       include: [
         {
           model: Task,
-          where: { listId: id },
         },
       ],
     });
@@ -37,7 +37,7 @@ const get = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.userId;
     const lists = await List.findAll({
       include: [
         {
@@ -57,7 +57,6 @@ const update = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ where: { email } });
-    console.log(user);
     const { id } = req.params;
 
     const list = await List.findOne({

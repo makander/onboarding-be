@@ -13,7 +13,6 @@ const create = async (req, res) => {
     const newTask = await list.createTask(taskProps);
 
     res.status(200).send(newTask);
-    res.status(200).send('Task Created');
   } catch (error) {
     res.json(error);
   }

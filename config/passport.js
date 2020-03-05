@@ -5,8 +5,17 @@ const { User } = require('../models');
 require('jsonwebtoken');
 
 module.exports = (passport) => {
+  const cookieExtractor = (req) => {
+    let token = null;
+    if (req && req.cookies) {
+      console.log(req.cookies.borderToken);
+      token = req.cookies.borderToken;
+    }
+    return token;
+  };
+
   const opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: cookieExtractor,
     secretOrKey: process.env.JWT_SECRET,
   };
 
@@ -30,25 +39,14 @@ module.exports = (passport) => {
     ),
   );
 
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-
-  passport.deserializeUser((id, done) => {
-    User.findOne({ where: { id } })
-      .then((user) => {
-        done(null, user);
-      })
-      .catch(done);
-  });
-
   passport.use(
-    'jwt',
-    new JwtStrategy(opts, (jwtPayload, done) => {
-      console.log('payload received', jwtPayload);
-      User.findOne({ where: { id: jwtPayload } })
-        .then((user) => done(null, user))
-        .catch((err) => done(err));
-    }),
+    'jwt', new JwtStrategy(opts, (async (jwtPayload, done) => {
+      try {
+        const user = await User.findOne({ where: { id: jwtPayload.id } });
+        return done(null, user.id);
+      } catch (err) {
+        return done(err);
+      }
+    })),
   );
 };
