@@ -4,7 +4,7 @@ const departmentService = require('../../../services/DepartmentService');
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/', (req, res) => departmentService.list(req, res));
+router.get('/list', (req, res) => departmentService.list(req, res));
 router.post('/', (req, res) => departmentService.create(req, res));
 router.delete('/:id', (req, res) => departmentService.destroy(req, res));
 router.put('/:id', (req, res) => departmentService.update(req, res));

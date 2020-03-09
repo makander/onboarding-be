@@ -35,22 +35,31 @@ router.post(
 );
 
 router.get(
-  '/profile/:id',
+  ':id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     res.json('authenticated');
   },
 );
 
+router.get(
+  '/list',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    userService.list(req, res);
+  },
+);
+
+
 router.put(
-  '/update/:id',
+  '/:id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     userService.update(req, res);
   },
 );
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   userService.destroy(req, res);
 });
 
