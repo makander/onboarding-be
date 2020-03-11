@@ -91,4 +91,5 @@ module.exports = {
   list,
   destroy,
   update,
+  get,
 };
