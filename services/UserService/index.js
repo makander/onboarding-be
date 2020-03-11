@@ -43,8 +43,24 @@ const destroy = async (req, res) => {
   }
 };
 
+const list = async (req, res) => {
+  try {
+    const users = await User.findAll({});
+
+    res.status(200).send(users);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const logout = (id) => null;
+
+
 module.exports = {
   create,
   update,
   destroy,
+  list,
+  logout,
+
 };

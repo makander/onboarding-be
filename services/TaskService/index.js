@@ -5,13 +5,12 @@ const { Department } = require('../../models');
 
 const create = async (req, res) => {
   try {
-    const { id } = req.params;
     const taskProps = req.body;
 
-    const list = await List.findOne({ where: { id } });
+    // const list = await List.findOne({ where: { id } });
 
-    const newTask = await list.createTask(taskProps);
-
+    const newTask = await Task.create(taskProps);
+    console.log(newTask);
     res.status(200).send(newTask);
   } catch (error) {
     res.json(error);

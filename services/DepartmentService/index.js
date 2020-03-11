@@ -1,9 +1,14 @@
 const { Department } = require('../../models');
+const { User } = require('../../models');
+
 
 const create = async (req, res) => {
   try {
-    const deparmentProps = req.body;
-    await Department.create(deparmentProps);
+    const users = req.body.users.value;
+    const { name } = req.body;
+    const { description } = req.body;
+    const newDepartment = await Department.create({ name, description });
+    users.map(async (user) => newDepartment.addUser(user, { through: { UserDepartment: user } }));
     res.status(200).send('Department Created');
   } catch (error) {
     res.json(error);
@@ -12,7 +17,7 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const allDeps = await Department.findAll({});
+    const allDeps = await Department.findAll({ attributes: { exclude: ['createdAt', 'updatedAt'] } });
 
     res.json(allDeps);
   } catch (error) {
