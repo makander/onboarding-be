@@ -12,7 +12,6 @@ const create = async (req, res) => {
       users.map(async (user) => newDepartment.addUser(user, { through: { UserDepartment: user } }));
     }
 
-    console.log(newDepartment);
     res.send(newDepartment);
   } catch (error) {
     res.json(error);
@@ -30,7 +29,6 @@ const list = async (req, res) => {
         }],
     });
 
-    console.log(allDeps);
     res.json(allDeps);
   } catch (error) {
     res.json(error);
@@ -42,6 +40,11 @@ const get = async (req, res) => {
     const { id } = req.params;
     const dep = await Department.findOne({
       where: { id },
+      include: [
+        {
+          model: User,
+          attributes: { exclude: ['createdAt', 'updatedAt', 'role', 'password'] },
+        }],
     });
 
     res.json(dep);

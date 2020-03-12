@@ -1,17 +1,23 @@
+const chalk = require('chalk');
 const { List } = require('../../models');
 const { User } = require('../../models');
 const { Task } = require('../../models');
 
 const create = async (req, res) => {
   try {
-    const id = req.userId;
-    const listProps = req.body;
+    const { name } = req.body;
+    const { description } = req.body;
 
-    const user = await User.findOne({ where: { id } });
-    const newList = await List.create(listProps);
-    const result = await newList.addUser(user, { through: { UserList: id } });
+    const departments = req.body.departments.value;
 
-    res.status(200).send(result);
+    const newList = await List.create({ name, description });
+
+    if (departments) {
+      departments.map(async (department) => newList.addDepartment(department, {
+        through: { ListDepartment: department },
+      }));
+    }
+    res.send(newList);
   } catch (error) {
     res.json(error);
   }
@@ -20,7 +26,6 @@ const create = async (req, res) => {
 const get = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const list = await List.findOne({
       include: [
         {
@@ -63,7 +68,6 @@ const update = async (req, res) => {
       where: { id },
       include: User,
     });
-    console.log(list);
 
     const updateList = await list.addUsers([user]);
 
