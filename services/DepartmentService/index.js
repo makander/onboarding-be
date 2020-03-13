@@ -56,16 +56,24 @@ const get = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const dep = await Department.findOne({
+    const { users } = req.body;
+    const { name } = req.body;
+    const { description } = req.body;
+
+
+    const department = await Department.findOne({
       where: { id },
+      include: User,
     });
 
-    const updateDep = await dep.update(req.body, {
-      returning: true,
-      plain: true,
+    await department.update({ name, description }).then(((updatedDep) => updatedDep.setUsers([users])));
+
+    const updatedDepartment = await Department.findOne({
+      where: { id },
+      include: User,
     });
 
-    res.send(updateDep);
+    res.send(updatedDepartment);
   } catch (error) {
     res.json(error);
   }
