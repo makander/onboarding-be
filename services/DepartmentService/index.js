@@ -1,10 +1,18 @@
 const { Department } = require('../../models');
+const { User } = require('../../models');
 
 const create = async (req, res) => {
   try {
-    const deparmentProps = req.body;
-    await Department.create(deparmentProps);
-    res.status(200).send('Department Created');
+    const users = req.body.users.value;
+    const { name } = req.body;
+    const { description } = req.body;
+    const newDepartment = await Department.create({ name, description });
+
+    if (users) {
+      users.map(async (user) => newDepartment.addUser(user, { through: { UserDepartment: user } }));
+    }
+
+    res.send(newDepartment);
   } catch (error) {
     res.json(error);
   }
@@ -12,7 +20,14 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const allDeps = await Department.findAll({});
+    const allDeps = await Department.findAll({
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      include: [
+        {
+          model: User,
+          attributes: { exclude: ['createdAt', 'updatedAt', 'role', 'password'] },
+        }],
+    });
 
     res.json(allDeps);
   } catch (error) {
@@ -25,6 +40,11 @@ const get = async (req, res) => {
     const { id } = req.params;
     const dep = await Department.findOne({
       where: { id },
+      include: [
+        {
+          model: User,
+          attributes: { exclude: ['createdAt', 'updatedAt', 'role', 'password'] },
+        }],
     });
 
     res.json(dep);

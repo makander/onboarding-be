@@ -1,6 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
-const { ExtractJwt } = require('passport-jwt');
 const { User } = require('../models');
 require('jsonwebtoken');
 
@@ -35,18 +34,19 @@ module.exports = (passport) => {
           }
           return done(null, false);
         });
-      },
-    ),
+      }
+    )
   );
 
   passport.use(
-    'jwt', new JwtStrategy(opts, (async (jwtPayload, done) => {
+    'jwt',
+    new JwtStrategy(opts, async (jwtPayload, done) => {
       try {
         const user = await User.findOne({ where: { id: jwtPayload.id } });
         return done(null, user.id);
       } catch (err) {
         return done(err);
       }
-    })),
+    })
   );
 };
