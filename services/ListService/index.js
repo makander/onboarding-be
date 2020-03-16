@@ -44,12 +44,12 @@ const list = async (req, res) => {
   try {
     const id = req.userId;
     const lists = await List.findAll({
-      include: [
+      include:
         {
           model: User,
           where: { id },
         },
-      ],
+
     });
 
     res.json(lists);

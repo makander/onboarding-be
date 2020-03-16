@@ -1,18 +1,37 @@
+const chalk = require('chalk');
 const { Department } = require('../../models');
 const { User } = require('../../models');
+const { UserDepartment } = require('../../models');
 
 const create = async (req, res) => {
   try {
-    const users = req.body.users.value;
+    const { users } = req.body;
     const { name } = req.body;
-    const { description } = req.body;
-    const newDepartment = await Department.create({ name, description });
+    const newDepartment = await Department.create({ name });
 
-    if (users) {
-      users.map(async (user) => newDepartment.addUser(user, { through: { UserDepartment: user } }));
+    if (users.length !== 0) {
+      await newDepartment.addUsers(users);
+      const response = await Department.findOne({
+        where: { id: newDepartment.id },
+        include: [
+          {
+            model: User,
+            attributes: { exclude: ['createdAt', 'updatedAt', 'role', 'password'] },
+          }],
+      });
+
+      res.send(response);
+    } else {
+      const depWithoutUsers = await Department.findOne({
+        where: { id: newDepartment.id },
+        include: [
+          {
+            model: User,
+            attributes: { exclude: ['createdAt', 'updatedAt', 'role', 'password'] },
+          }],
+      });
+      res.send(depWithoutUsers);
     }
-
-    res.send(newDepartment);
   } catch (error) {
     res.json(error);
   }
@@ -22,11 +41,11 @@ const list = async (req, res) => {
   try {
     const allDeps = await Department.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
-      include: [
+      include:
         {
           model: User,
-          attributes: { exclude: ['createdAt', 'updatedAt', 'role', 'password'] },
-        }],
+
+        },
     });
 
     res.json(allDeps);
@@ -58,22 +77,32 @@ const update = async (req, res) => {
     const { id } = req.params;
     const { users } = req.body;
     const { name } = req.body;
-    const { description } = req.body;
-
+    console.log(chalk.red.redBright(req.body));
 
     const department = await Department.findOne({
       where: { id },
       include: User,
     });
 
-    await department.update({ name, description }).then(((updatedDep) => updatedDep.setUsers([users])));
+    if (name.length !== 0) {
+      const updated = await department.update({ name });
+      console.dir(chalk.red.redBright(updated));
+    }
 
-    const updatedDepartment = await Department.findOne({
-      where: { id },
+    // const updated = await department.update({ name });
+
+    if (users.length !== 0) {
+      const updateWithUsers = await department.addUsers(users);
+      console.log('Uppdatera users',
+        JSON.stringify(updateWithUsers, null, 2));
+    }
+
+    const response = await Department.findOne({
+      where: { id: department.id },
       include: User,
     });
 
-    res.send(updatedDepartment);
+    res.send(response);
   } catch (error) {
     res.json(error);
   }
@@ -92,10 +121,37 @@ const destroy = async (req, res) => {
     console.log(error);
   }
 };
+
+
+const removeUser = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { UserId } = req.body;
+
+    await UserDepartment.destroy({
+      where: {
+        UserId,
+        DepartmentId: id,
+      },
+    });
+
+    const response = await Department.findOne({
+      where: { id },
+      include: User,
+    });
+
+    res.send(response);
+  } catch (error) {
+    res.json(error);
+  }
+};
+
+
 module.exports = {
   create,
   list,
   get,
   destroy,
   update,
+  removeUser,
 };
