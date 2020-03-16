@@ -1,66 +1,39 @@
 const { User } = require('../../models/');
 
-const create = async (req, res) => {
-  const userProps = req.body;
-  console.log(req.body);
-  try {
-    await User.create(userProps).then(() => res.status(200).send('user created'));
-  } catch (error) {
-    console.log(error);
-    res.json(error);
-  }
+const create = async (userProps) => {
+    return await User.create(userProps);
 };
 
-const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const user = await User.findOne({ where: { id } });
-    const updateUser = await user.update(req.body, {
+const update = async (updatedUser) => {
+   return await user.update(updatedUser, {
       returning: true,
       plain: true,
     });
-    console.log(user);
-    console.log(updateUser);
-    res.send(updateUser);
-  } catch (error) {
-    console.log(error);
-    res.json(error);
-  }
 };
 
 
-const destroy = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await User.destroy({
-      where: {
-        id,
-      },
-    });
-    res.status(200).send('User deleted');
-  } catch (error) {
-    console.log(error);
-  }
+const deleteOne = async (id) => {
+  return await User.destroy({
+    where: { id }
+  });
+}
+
+
+const findAll = async () => {
+    return await User.findAll({});
 };
 
-const list = async (req, res) => {
-  try {
-    const users = await User.findAll({});
-
-    res.status(200).send(users);
-  } catch (error) {
-    console.log(error);
-  }
-};
+const findOne = async (id) => {
+  return await User.findOne({ where: { id } });
+}
 
 const logout = (id) => null;
-
 
 module.exports = {
   create,
   update,
-  destroy,
-  list,
+  deleteOne,
+  findAll,
   logout,
-
+  findOne,
 };
