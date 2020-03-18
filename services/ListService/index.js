@@ -1,22 +1,23 @@
 const chalk = require('chalk');
 const { List } = require('../../models');
 const { User } = require('../../models');
+const { Department } = require('../../models');
 const { Task } = require('../../models');
 
 const create = async (req, res) => {
   try {
     const { name } = req.body;
     const { description } = req.body;
-
-    const departments = req.body.departments.value;
-
+    // const id = req.userId;
+    const { departments } = req.body;
     const newList = await List.create({ name, description });
+    // newList.addUsers(id);
 
     if (departments) {
-      departments.map(async (department) => newList.addDepartment(department, {
-        through: { ListDepartment: department },
-      }));
+      newList.addDepartments(departments);
     }
+
+
     res.send(newList);
   } catch (error) {
     res.json(error);
@@ -27,6 +28,7 @@ const get = async (req, res) => {
   try {
     const { id } = req.params;
     const list = await List.findOne({
+      where: { id },
       include: [
         {
           model: Task,
@@ -43,15 +45,20 @@ const get = async (req, res) => {
 const list = async (req, res) => {
   try {
     const id = req.userId;
-    const lists = await List.findAll({
-      include:
+    const lists = await Department.findAll({
+      include: [
         {
           model: User,
           where: { id },
         },
+        {
+          model: List,
+        },
+      ],
 
     });
 
+    console.log(lists);
     res.json(lists);
   } catch (error) {
     res.json(error);

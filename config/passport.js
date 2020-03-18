@@ -34,8 +34,8 @@ module.exports = (passport) => {
           }
           return done(null, false);
         });
-      }
-    )
+      },
+    ),
   );
 
   passport.use(
@@ -47,6 +47,6 @@ module.exports = (passport) => {
       } catch (err) {
         return done(err);
       }
-    })
+    }),
   );
 };

@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     List.hasOne(models.Employee, { foreginKey: 'listId' });
     List.belongsToMany(models.Department, { through: 'DepartmentList' });
     List.belongsToMany(models.User, { through: 'UserList' });
-    List.hasMany(models.Task, { foreginKey: 'listId' });
+    List.hasMany(models.Task);
   };
   return List;
 };

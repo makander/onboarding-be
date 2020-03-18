@@ -41,10 +41,11 @@ router.post(
 );
 
 router.get(
-  ':id',
+  '/',
   passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.json('authenticated');
+  async (req, res) => {
+    const user = await userService.findOne(req.user);
+    res.send(user);
   },
 );
 
@@ -53,8 +54,8 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-    const allUsers = await userService.findAll();
-    res.send(allUsers);
+      const allUsers = await userService.findAll();
+      res.send(allUsers);
     } catch (error) {
       console.log(error);
       // res.error(error);
@@ -69,23 +70,22 @@ router.put(
   async (req, res) => {
     try {
       const { id } = req.params;
-      const body = req.body;
-      const user = await userService.findOne(id);
-      const updatedUser = {...user, ...body};
-      await auserService.update(updatedUser);
+      const { body } = req;
+      const user = await userService.get(id);
+      const updatedUser = { ...user, ...body };
+      await userService.update(updatedUser);
       res.send(updatedUser);
     } catch (error) {
       console.log(error);
       // res.error(error);
     }
-    
   },
 );
 
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    await userService.delete(id);
+    await userService.destroy(id);
     res.status(200).send('User deleted');
   } catch (error) {
     console.log(error);
