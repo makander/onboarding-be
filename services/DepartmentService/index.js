@@ -2,6 +2,8 @@ const chalk = require('chalk');
 const { Department } = require('../../models');
 const { User } = require('../../models');
 const { UserDepartment } = require('../../models');
+const { List } = require('../../models');
+
 
 const create = async (req, res) => {
   try {
@@ -37,7 +39,7 @@ const create = async (req, res) => {
   }
 };
 
-const list = async (req, res) => {
+const findAll = async (req, res) => {
   try {
     const allDeps = await Department.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
@@ -54,12 +56,31 @@ const list = async (req, res) => {
   }
 };
 
-const get = async (req, res) => {
+const findOne = async (req, res) => {
   try {
     const { id } = req.params;
     const dep = await Department.findOne({
       where: { id },
       include: [
+        {
+          model: User,
+          attributes: { exclude: ['createdAt', 'updatedAt', 'role', 'password'] },
+        }],
+    });
+
+    res.json(dep);
+  } catch (error) {
+    res.json(error);
+  }
+};
+
+const findAllDepartmentTasks = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dep = await Department.findAll({
+
+      include: [
+        { model: List, where: { id } },
         {
           model: User,
           attributes: { exclude: ['createdAt', 'updatedAt', 'role', 'password'] },
@@ -146,12 +167,36 @@ const removeUser = async (req, res) => {
   }
 };
 
+const findAllDepartmentLists = async (req, res) => {
+  try {
+    const id = req.userId;
+    const lists = await Department.findAll({
+      include: [
+        {
+          model: User,
+          where: { id },
+        },
+        {
+          model: List,
+        },
+      ],
+
+    });
+
+
+    res.json(lists);
+  } catch (error) {
+    res.json(error);
+  }
+};
 
 module.exports = {
   create,
-  list,
-  get,
+  findAll,
+  findOne,
   destroy,
   update,
   removeUser,
+  findAllDepartmentTasks,
+  findAllDepartmentLists,
 };

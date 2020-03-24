@@ -1,19 +1,13 @@
+const chalk = require('chalk');
 const { Task } = require('../../models');
 const { List } = require('../../models');
 const { User } = require('../../models');
-const { Department } = require('../../models');
 
 const create = async (req, res) => {
   try {
-    const { id } = req.params;
-    // const taskProps = req.body;
-
-    console.log(req.params);
-    // taskProps.Us
-    console.log(req.body);
     const { name } = req.body;
     const { description } = req.body;
-    const { user } = req.body;
+
     const { ListId } = req.body;
 
 
@@ -48,6 +42,7 @@ const get = async (req, res) => {
     const { id } = req.params;
     const task = await Task.findOne({
       where: { id },
+      include: [{ model: User }],
     });
 
     res.json(task);
@@ -58,12 +53,27 @@ const get = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    console.log(req);
     const { id } = req.params;
     const task = await Task.findOne({
       where: { id },
     });
+    const { userId } = req.body;
 
+    console.log(chalk.bgRedBright('id: ', id, 'userId: ', userId));
+    console.log(chalk.bgRedBright('req body: ', req.body));
+
+
+    if (userId) {
+      const user = await User.findOne({ where: { id: userId } });
+      await user.addTasks(task);
+
+      const returnedTask = await Task.findOne({
+        where: { id },
+        include: [{ model: User }],
+
+      });
+      res.send(returnedTask);
+    }
     const updateTask = await task.update(req.body, {
       returning: true,
       plain: true,
