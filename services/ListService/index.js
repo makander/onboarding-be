@@ -8,13 +8,13 @@ const create = async (req, res) => {
   try {
     const { name } = req.body;
     const { description } = req.body;
-    const listId = req.body.listId[0];
-    const { templateList } = req.body;
-
-    console.log(listId);
     const { departments } = req.body;
 
-    if (listId) {
+
+    if (req.body.listId) {
+      const listId = req.body.listId[0];
+
+
       const template = await List.findOne({
         where: { id: listId },
         include: [{ model: Department }],
@@ -22,11 +22,6 @@ const create = async (req, res) => {
           exclude: ['createdAt', 'updatedAt', 'id', 'templateList'],
         },
       });
-
-      // console.log(template);
-      console.log(template.Departments);
-      /*       const newList = await List.create({ template });
-      console.log(newList); */
 
 
       const TemplateTasks = await Task.findAll({
@@ -51,28 +46,22 @@ const create = async (req, res) => {
       })).then(() => console.log('done')).catch((err) => console(err));
 
 
-      console.log(newList.id);
-
       const returnedList = await List.findOne({ where: { id: newList.id } });
-      console.log(returnedList);
 
 
       res.send(returnedList);
-      /*       const newTask = await Task.create({ name, description });
-      const listWTask = await List.findOne({ where: { id: ListId } });
-      const addTask = await listWTask.addTasks(newTask); */
-
-
-      // delete template
-      console.log(TemplateTasks);
-
-      // constTemplateTask = await template
     }
-
-    /*     const newList = await List.create({ name, description, templateList });
-    // newList.addUsers(id);
-
-*/
+    if (req.body.templateList) {
+      const { templateList } = req.body;
+      const newTemplateList = await List.create({ name, description, templateList });
+      if (departments) {
+        departments.map(async (department) => newTemplateList.addDepartment(department, {
+          through: { ListDepartment: department },
+        }));
+      }
+      const returnedList = await List.findOne({ where: { id: newTemplateList.id } });
+      res.send(returnedList);
+    }
   } catch (error) {
     res.json(error);
   }
