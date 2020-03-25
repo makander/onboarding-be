@@ -35,15 +35,15 @@ const create = async (req, res) => {
 
       const newList = await List.create({ name, description: template.description });
 
-      Promise.all(template.Departments.map(async (department) => {
+      template.Departments.forEach(async (department) => {
         await newList.addDepartments(department);
-      }));
+      });
 
 
-      Promise.all(TemplateTasks.map(async (task) => {
+      TemplateTasks.forEach(async (task) => {
         const newTask = await Task.create({ name: task.name, description: task.description });
         await newList.addTasks(newTask);
-      })).then(() => console.log('done')).catch((err) => console(err));
+      });
 
 
       const returnedList = await List.findOne({ where: { id: newList.id } });
