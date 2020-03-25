@@ -7,6 +7,7 @@ const userController = require('../controllers/api/users');
 const taskController = require('../controllers/api/tasks');
 const departmentController = require('../controllers/api/departments');
 const listController = require('../controllers/api/lists');
+const employeeController = require('../controllers/api/employeeController');
 
 router.use('/api/user', userController);
 
@@ -17,6 +18,9 @@ router.use('/api/department', passport.authenticate('jwt', { session: false, ass
 router.use('/api/list', passport.authenticate('jwt', { session: false, assignProperty: 'userId' }), listController);
 
 router.use('/api/list/:id/task', taskController);
+
+router.use('/api/employee', passport.authenticate('jwt', { session: false, assignProperty: 'userId' }), employeeController);
+
 
 // router.use('/api/departments', departmentController);
 
