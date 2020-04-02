@@ -9,10 +9,7 @@ const routes = require('./routes');
 
 require('./config/passport')(passport);
 
-const allowedOrigins = [
-  // 'https://coffeepot-fe.herokuapp.com',
-  'http://localhost:3000',
-];
+const allowedOrigins = ['http://localhost:3000'];
 
 const app = express();
 
@@ -46,4 +43,5 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 app.use('/', routes);
+app.use(express.static('build'));
 module.exports = app;
