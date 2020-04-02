@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const path = require('path');
 
 const router = express.Router();
 
@@ -37,7 +38,7 @@ router.use(
   employeeController
 );
 
-router.use('/', express.static('build'));
+router.use('/', express.static(path.join(__dirname, 'build')));
 // router.use('/api/departments', departmentController);
 
 module.exports = router;
