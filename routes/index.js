@@ -9,8 +9,9 @@ const taskController = require('../controllers/api/taskController');
 const departmentController = require('../controllers/api/departmentController');
 const listController = require('../controllers/api/listController');
 const employeeController = require('../controllers/api/employeeController');
+const homeController = require('../controllers/homeController');
 
-router.use('/*', express.static(path.join(__dirname, '/../build')));
+router.use('/', homeController);
 
 router.use('/api/user', userController);
 
