@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const path = require('path');
 
 const router = express.Router();
 
@@ -9,34 +10,36 @@ const departmentController = require('../controllers/api/departmentController');
 const listController = require('../controllers/api/listController');
 const employeeController = require('../controllers/api/employeeController');
 
-router.use('/user', userController);
+router.use('/', express.static(path.join(__dirname, 'build')));
+
+router.use('/api/user', userController);
 
 router.use(
-  '/task',
+  '/api/task',
   passport.authenticate('jwt', { session: false, assignProperty: 'userId' }),
   taskController
 );
 
 router.use(
-  '/department',
+  '/api/department',
   passport.authenticate('jwt', { session: false, assignProperty: 'userId' }),
   departmentController
 );
 
 router.use(
-  '/list',
+  '/api/list',
   passport.authenticate('jwt', { session: false, assignProperty: 'userId' }),
   listController
 );
 
-// router.use('/list/:id/task', taskController);
+// router.use('/api/list/:id/task', taskController);
 
 router.use(
-  '/employee',
+  '/api/employee',
   passport.authenticate('jwt', { session: false, assignProperty: 'userId' }),
   employeeController
 );
 
-// router.use('/departments', departmentController);
+// router.use('/api/departments', departmentController);
 
 module.exports = router;

@@ -5,7 +5,6 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-const path = require('path');
 const routes = require('./routes');
 
 require('./config/passport')(passport);
@@ -42,6 +41,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(passport.initialize());
-app.use('/', express.static(path.join(__dirname, 'build')));
-app.use('/api', routes);
+
+app.use('/', routes);
 module.exports = app;
