@@ -5,8 +5,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
+const path = require('path');
 const routes = require('./routes');
-
 require('./config/passport')(passport);
 
 const allowedOrigins = ['http://localhost:3000'];
@@ -43,5 +43,5 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 app.use('/', routes);
-app.use(express.static('build'));
+app.use(express.static(path.join(__dirname, 'client/build')));
 module.exports = app;
