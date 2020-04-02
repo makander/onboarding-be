@@ -1,17 +1,25 @@
+/* const chalk = require('chalk');
 const { Task } = require('../../models');
 const { List } = require('../../models');
 const { User } = require('../../models');
-const { Department } = require('../../models');
 
 const create = async (req, res) => {
   try {
-    const taskProps = req.body;
+    const { name } = req.body;
+    const { description } = req.body;
 
-    // const list = await List.findOne({ where: { id } });
+    const { ListId } = req.body;
 
-    const newTask = await Task.create(taskProps);
-    console.log(newTask);
-    res.status(200).send(newTask);
+    const newTask = await Task.create({ name, description });
+    const listWTask = await List.findOne({ where: { id: ListId } });
+    const addTask = await listWTask.addTasks(newTask);
+
+    // await newTask.addUsers(user);
+
+    //  const returnedTask = await newTask.addUsers(user);
+    // await Task.findOne({ where: { id } });
+
+    res.status(200).send(addTask);
   } catch (error) {
     res.json(error);
   }
@@ -32,6 +40,7 @@ const get = async (req, res) => {
     const { id } = req.params;
     const task = await Task.findOne({
       where: { id },
+      include: [{ model: User }],
     });
 
     res.json(task);
@@ -43,14 +52,23 @@ const get = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
+
     const task = await Task.findOne({
       where: { id },
     });
+    const { userId } = req.body;
 
-    const updateTask = await task.update(req.body, {
-      returning: true,
-      plain: true,
-    });
+    if (userId) {
+      const user = await User.findOne({ where: { id: userId } });
+      await user.addTasks(task);
+
+      const returnedTask = await Task.findOne({
+        where: { id },
+        include: [{ model: User }],
+      });
+      return res.send(returnedTask);
+    }
+    const updateTask = await task.update(req.body);
 
     res.send(updateTask);
   } catch (error) {
@@ -78,3 +96,4 @@ module.exports = {
   destroy,
   update,
 };
+ */
