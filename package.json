@@ -4,8 +4,8 @@
   "description": "backend for onboarding-app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
+    "test": "nodemon index.js",
+    "start": "node index.js",
     "build:ui": "rm -rf build && cd ../onboarding-fe && npm run build --prod && cp -r build ../../onboarding-be/",
     "deploy": "git push -f heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
