@@ -9,7 +9,11 @@ const routes = require('./routes');
 
 require('./config/passport')(passport);
 
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3000',
+  'https://secret-reef-21812.herokuapp.com/',
+];
 
 const app = express();
 
