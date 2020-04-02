@@ -6,7 +6,7 @@
   "scripts": {
     "test": "nodemon index.js",
     "start": "node index.js",
-    "build:ui": "rm -rf build && cd ../onboarding-fe && npm run build --prod && cp -r build ../../onboarding-be/",
+    "build:ui": "rm -rf build && cd ../onboarding-fe && npm run build --prod && cp -r build ../onboarding-be/",
     "deploy": "git push heroku test-deploy:master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail"
