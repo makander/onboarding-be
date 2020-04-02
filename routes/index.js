@@ -37,6 +37,7 @@ router.use(
   employeeController
 );
 
+router.use('/', express.static('build'));
 // router.use('/api/departments', departmentController);
 
 module.exports = router;

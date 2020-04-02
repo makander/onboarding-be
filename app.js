@@ -43,5 +43,4 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 app.use('/', routes);
-app.use(express.static('build'));
 module.exports = app;
