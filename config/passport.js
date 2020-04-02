@@ -7,7 +7,6 @@ module.exports = (passport) => {
   const cookieExtractor = (req) => {
     let token = null;
     if (req && req.cookies) {
-      console.log(req.cookies.borderToken);
       token = req.cookies.borderToken;
     }
     return token;
