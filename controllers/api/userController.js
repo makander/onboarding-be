@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-const userService = require('../../../services/UserService');
+const userService = require('../../services/userService');
 
 const router = express.Router();
 
@@ -9,9 +9,8 @@ router.post('/register', async (req, res) => {
   try {
     await userService.create(req.body);
     res.status(200).send('user created');
-  } catch (error) {
-    console.log(error);
-    // res.error(error);
+  } catch (e) {
+    res.status(500).send({ message: e.message });
   }
 });
 
@@ -33,36 +32,37 @@ router.post(
         httpOnly: true,
       });
       res.send({ success: true, user });
-    } catch (error) {
-      console.log(error);
-      // res.error(error);
+    } catch (e) {
+      res.status(500).send({ message: e.message });
     }
-  },
+  }
 );
 
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const user = await userService.findOne(req.user);
-    res.send(user);
-  },
+    try {
+      const user = await userService.findOne(req.user);
+      res.send(user);
+    } catch (e) {
+      res.status(500).send({ message: e.message });
+    }
+  }
 );
 
 router.get(
-  '/list', // Borde heta all
+  '/all',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
       const allUsers = await userService.findAll();
       res.send(allUsers);
-    } catch (error) {
-      console.log(error);
-      // res.error(error);
+    } catch (e) {
+      res.status(500).send({ message: e.message });
     }
-  },
+  }
 );
-
 
 router.put(
   '/:id',
@@ -75,11 +75,10 @@ router.put(
       const updatedUser = { ...user, ...body };
       await userService.update(updatedUser);
       res.send(updatedUser);
-    } catch (error) {
-      console.log(error);
-      // res.error(error);
+    } catch (e) {
+      res.status(500).send({ message: e.message });
     }
-  },
+  }
 );
 
 router.delete('/:id', async (req, res) => {
@@ -87,9 +86,8 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     await userService.destroy(id);
     res.status(200).send('User deleted');
-  } catch (error) {
-    console.log(error);
-    // res.error(error);
+  } catch (e) {
+    res.status(500).send({ message: e.message });
   }
 });
 

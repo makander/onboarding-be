@@ -2,7 +2,6 @@ const chalk = require('chalk');
 const app = require('./app');
 const models = require('./models');
 
-
 models.sequelize
   .sync()
   .then(() => {
