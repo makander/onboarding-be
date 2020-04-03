@@ -2,7 +2,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Task = sequelize.define('Task', {
     description: DataTypes.TEXT,
-    status: DataTypes.BOOLEAN,
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
