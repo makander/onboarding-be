@@ -1,6 +1,6 @@
 const { Department } = require('../models');
 const { User } = require('../models');
-// const { UserDepartment } = require('../models');
+const { UserDepartment } = require('../models');
 const { List } = require('../models');
 const { Task } = require('../models');
 
@@ -71,11 +71,11 @@ const update = async (params, data) => {
   });
 
   if (name.length !== 0) {
-    return department.update({ name });
+    await department.update({ name });
   }
 
   if (users.length !== 0) {
-    return department.addUsers(users);
+    await department.addUsers(users);
   }
 
   return Department.findOne({
@@ -97,7 +97,11 @@ const removeUser = async (params, data) => {
   const { id } = params;
   const { UserId } = data;
 
-  await Department.removeUser(UserId);
+  await UserDepartment.destroy({
+    where: {
+      UserId,
+    },
+  });
 
   return Department.findOne({
     where: { id },
@@ -120,7 +124,6 @@ const findAllTasks = async (id) => {
 };
 
 const findAllLists = async (id) => {
-  console.log('AM INSIDE YOUR BASE');
   return Department.findAll({
     include: [
       {
