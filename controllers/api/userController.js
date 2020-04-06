@@ -19,13 +19,7 @@ router.post(
   passport.authenticate('local', { session: false }),
   (req, res) => {
     try {
-      const user = {
-        id: req.user.id,
-        userName: req.user.email,
-        role: req.user.role,
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-      };
+      const { user } = req;
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
       res.cookie('borderToken', token, {
         maxAge: new Date(Date.now() + 43200000),
@@ -43,7 +37,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      const user = await userService.findOne(req.user);
+      const user = await userService.findOne(req.user.id);
       res.send(user);
     } catch (e) {
       res.status(500).send({ message: e.message });
