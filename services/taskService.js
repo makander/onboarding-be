@@ -1,8 +1,6 @@
-const { Department } = require('../models');
 const { User } = require('../models');
 const { List } = require('../models');
 const { Task } = require('../models');
-const { Employee } = require('../models');
 
 const create = async (data) => {
   const { name, description, ListId } = data;
