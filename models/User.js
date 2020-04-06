@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       email: { type: DataTypes.STRING, unique: true, isEmail: true },
       role: DataTypes.ENUM('Admin', 'Guest'),
     },
-    {},
+    {}
   );
 
   User.beforeCreate(async (user) => {
