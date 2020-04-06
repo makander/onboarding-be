@@ -25,9 +25,7 @@ router.get('/all', async (req, res) => {
 
 router.get('/lists', async (req, res) => {
   try {
-    console.log(req.userId);
-    console.log(typeof req.userId);
-    const departmentLists = await departmentService.findAllLists(req.userId);
+    const departmentLists = await departmentService.findAllLists(req.user.id);
     res.send(departmentLists);
   } catch (e) {
     res.status(500).send({ message: e.message });
@@ -45,7 +43,6 @@ router.get('/:id', async (req, res) => {
 
 router.get('/tasks', async (req, res) => {
   try {
-    console.log('GETTING DEM TASKS');
     const departmentTasks = await departmentService.findAllTasks(req.params);
     res.json(departmentTasks);
   } catch (e) {

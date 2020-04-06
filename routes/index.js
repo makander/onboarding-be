@@ -17,19 +17,19 @@ router.use('/api/user', userController);
 
 router.use(
   '/api/task',
-  passport.authenticate('jwt', { session: false, assignProperty: 'userId' }),
+  passport.authenticate('jwt', { session: false }),
   taskController
 );
 
 router.use(
   '/api/department',
-  passport.authenticate('jwt', { session: false, assignProperty: 'userId' }),
+  passport.authenticate('jwt', { session: false }),
   departmentController
 );
 
 router.use(
   '/api/list',
-  passport.authenticate('jwt', { session: false, assignProperty: 'userId' }),
+  passport.authenticate('jwt', { session: false }),
   listController
 );
 
@@ -37,7 +37,7 @@ router.use(
 
 router.use(
   '/api/employee',
-  passport.authenticate('jwt', { session: false, assignProperty: 'userId' }),
+  passport.authenticate('jwt', { session: false }),
   employeeController
 );
 
