@@ -5,18 +5,19 @@ const { Task } = require('../models');
 
 const create = async (userProps) => User.create(userProps);
 
-const update = async (updatedUser) =>
-  User.update(updatedUser, {
-    returning: true,
-    plain: true,
-  });
+const update = async (id, data) => {
+  const user = await User.findOne({ where: { id } });
+  user.update(data);
+
+  User.findOne({ where: { id } });
+};
 
 const destroy = async (id) =>
   User.destroy({
     where: { id },
   });
 
-const findAll = async () => User.findAll({});
+const all = async () => User.findAll({});
 
 const findOne = async (id) => {
   return User.findOne({
@@ -37,7 +38,7 @@ const findOne = async (id) => {
 
 module.exports = {
   create,
-  findAll,
+  all,
   findOne,
   destroy,
   update,

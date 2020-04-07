@@ -33,11 +33,12 @@ router.post(
 );
 
 router.get(
-  '/',
+  '/:id',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      const user = await userService.findOne(req.user.id);
+      const { id } = req.params;
+      const user = await userService.findOne(id);
       res.send(user);
     } catch (e) {
       res.status(500).send({ message: e.message });
@@ -46,11 +47,11 @@ router.get(
 );
 
 router.get(
-  '/all',
+  '/',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      const allUsers = await userService.findAll();
+      const allUsers = await userService.all();
       res.send(allUsers);
     } catch (e) {
       res.status(500).send({ message: e.message });
@@ -64,10 +65,8 @@ router.put(
   async (req, res) => {
     try {
       const { id } = req.params;
-      const { body } = req;
-      const user = await userService.get(id);
-      const updatedUser = { ...user, ...body };
-      await userService.update(updatedUser);
+      const data = req.body;
+      const updatedUser = await userService.update(id, data);
       res.send(updatedUser);
     } catch (e) {
       res.status(500).send({ message: e.message });
