@@ -1,25 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
-  const List = sequelize.define(
-    'List',
-    {
-      description: DataTypes.TEXT,
-      name: {
-        type: DataTypes.STRING,
+  const List = sequelize.define('List', {
+    description: DataTypes.TEXT,
+    name: {
+      type: DataTypes.STRING,
+      validation: {
         allowNull: false,
         notEmpty: true,
         min: 2,
       },
-      status: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      templateList: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
     },
-    {}
-  );
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    templateList: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+  });
   List.associate = function (models) {
     // associations can be defined here
     List.hasOne(models.Employee, { onDelete: 'CASCADE', hooks: true });

@@ -5,8 +5,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-const routes = require('./routes');
 
+const routes = require('./routes');
 require('./config/passport')(passport);
 
 const allowedOrigins = [
@@ -39,10 +39,26 @@ app.use(
     credentials: true,
   })
 );
+
+const errorHandler = (error, request, response, next) => {
+  console.log(
+    'THIS IS ERRRRRRRRRRRRRRRRRRRRRRRR ORRRR MEEESSAAGE',
+    error.message
+  );
+
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return response.status(400).send({ error: 'malformed id' });
+  }
+  if (error.name === 'ValidationError:') {
+    return response.status(400).toJSON({ error: error.message });
+  }
+  next(error);
+};
+
 app.use(bodyParser.json());
 app.use(cookieParser());
-
 app.use(passport.initialize());
 
-app.use('/', routes);
+app.use('/', errorHandler, routes);
+app.use(errorHandler);
 module.exports = app;

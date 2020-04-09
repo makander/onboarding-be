@@ -36,10 +36,15 @@ const findOne = async (id) => {
   });
 };
 
+const logout = async () => {
+  return 
+}
+
 module.exports = {
   create,
   all,
   findOne,
   destroy,
   update,
+  logout
 };

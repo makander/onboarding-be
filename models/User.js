@@ -16,8 +16,18 @@ module.exports = (sequelize, DataTypes) => {
       notEmpty: true,
       min: 2,
     },
-    password: DataTypes.STRING,
-    email: { type: DataTypes.STRING, unique: true, isEmail: true },
+    password: {
+      type: DataTypes.STRING,
+      unique: true,
+      validate: {
+        min: 5,
+      },
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      validate: { isEmail: true },
+    },
     admin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

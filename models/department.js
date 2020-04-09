@@ -4,9 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
-        notEmpty: true,
-        min: 2,
+        validation: {
+          allowNull: false,
+          notEmpty: true,
+          min: 2,
+        },
       },
       // userId: DataTypes.INTEGER,
       // listId: DataTypes.INTEGER,
