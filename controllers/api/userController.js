@@ -76,25 +76,50 @@ router.put(
   }
 );
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    await userService.destroy(id);
-    res.status(200).send('User deleted');
-  } catch (e) {
-    next(e);
+router.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await userService.destroy(id);
+      res.status(200).send('User deleted');
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
-router.post('/logout', async (req, res, next) => {
-  try {
-    res.clearCookie('borderToken', {
-      maxAge: new Date(Date.now() + 43200000),
-      httpOnly: true,
-    });
-    return res.status(200).end();
-  } catch (e) {
-    next(e);
+router.post(
+  '/logout',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      res.clearCookie('borderToken', {
+        maxAge: 0,
+        httpOnly: true,
+      });
+      return res.status(200).end();
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
+
+router.post(
+  '/refresh',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      const {
+        user: { id },
+      } = req;
+      const user = await userService.findOne(id);
+      res.send({ success: true, user });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
 module.exports = router;

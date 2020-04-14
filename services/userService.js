@@ -17,7 +17,7 @@ const destroy = async (id) =>
     where: { id },
   });
 
-const all = async () => User.findAll({});
+const all = async (id) => User.findAll({});
 
 const findOne = async (id) => {
   return User.findOne({
@@ -36,15 +36,10 @@ const findOne = async (id) => {
   });
 };
 
-const logout = async () => {
-  return 
-}
-
 module.exports = {
   create,
   all,
   findOne,
   destroy,
   update,
-  logout
 };
