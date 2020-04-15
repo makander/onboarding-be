@@ -12,15 +12,12 @@ const create = async (data) => {
     title,
     email,
     address,
-    name,
     phoneNumber,
     listId,
     office,
   } = data;
 
-  if (listId !== null || listId.length !== 0) {
-    // const listId = listId[0];
-
+  if (listId !== null && listId !== '') {
     const template = await List.findOne({
       where: { id: listId },
       include: [{ model: Department }],
@@ -29,8 +26,6 @@ const create = async (data) => {
       },
     });
 
-    console.log('template', template);
-
     const TemplateTasks = await Task.findAll({
       include: [{ model: List, where: { id: listId } }],
       attributes: {
@@ -38,7 +33,6 @@ const create = async (data) => {
       },
     });
 
-    console.log('templatetask', TemplateTasks);
     const newList = await List.create({
       name: `${template.name} ${firstName} ${lastName}`,
       description: template.description,
@@ -71,16 +65,22 @@ const create = async (data) => {
     return List.findOne({ where: { id: newList.id } });
   }
 
-  const newList = await List.create({ name, description });
+  const newList = await List.create({
+    name: `${firstName} ${lastName}`,
+    description,
+  });
 
-  await newList.addEmployee({
+  const newEmployee = await Employee.create({
     firstName,
     lastName,
     phoneNumber,
     email,
     title,
     address,
+    office,
   });
+
+  await newList.setEmployee(newEmployee);
 
   return List.findOne({ where: { id: newList.id } });
 };
