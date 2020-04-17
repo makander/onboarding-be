@@ -65,7 +65,22 @@ const create = async (data) => {
 };
 
 const all = async () => {
-  return List.findAll({});
+  return List.findAll({
+    include: [
+      {
+        model: Task,
+
+        include: [{ model: User }],
+      },
+      {
+        model: Department,
+        include: [{ model: User }],
+      },
+      {
+        model: Employee,
+      },
+    ],
+  });
 };
 
 const findOne = async (data) => {

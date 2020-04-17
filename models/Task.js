@@ -1,4 +1,3 @@
-
 module.exports = (sequelize, DataTypes) => {
   const Task = sequelize.define('Task', {
     description: DataTypes.TEXT,
@@ -8,15 +7,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      notEmpty: true,
-      min: 2,
+      validation: {
+        allowNull: false,
+        notEmpty: true,
+        min: 2,
+      },
     },
-  }, {});
+  });
   Task.associate = function (models) {
     // associations can be defined here
     Task.belongsTo(models.User);
-    Task.belongsTo(models.List);
+    Task.belongsTo(models.List, {
+      onDelete: 'CASCADE',
+      hooks: true,
+    });
   };
   return Task;
 };

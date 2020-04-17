@@ -5,13 +5,13 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-const routes = require('./routes');
 
+const routes = require('./routes');
 require('./config/passport')(passport);
 
 const allowedOrigins = [
-  // 'https://coffeepot-fe.herokuapp.com',
-  'http://localhost:3000',
+  'http://localhost:5000/',
+  'https://secret-reef-21812.herokuapp.com',
 ];
 
 const app = express();
@@ -40,10 +40,25 @@ app.use(
   })
 );
 
+const errorHandler = (error, request, response, next) => {
+  console.log(
+    'THIS IS ERRRRRRRRRRRRRRRRRRRRRRRR ORRRR MEEESSAAGE',
+    error.message
+  );
+
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return response.status(400).send({ error: 'malformed id' });
+  }
+  if (error.name === 'ValidationError:') {
+    return response.status(400).toJSON({ error: error.message });
+  }
+  next(error);
+};
+
 app.use(bodyParser.json());
 app.use(cookieParser());
-
 app.use(passport.initialize());
 
-app.use('/', routes);
+app.use('/', errorHandler, routes);
+app.use(errorHandler);
 module.exports = app;

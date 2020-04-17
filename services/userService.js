@@ -1,40 +1,44 @@
 const { User } = require('../models');
 const { List } = require('../models');
 const { Department } = require('../models');
+const { Task } = require('../models');
 
 const create = async (userProps) => User.create(userProps);
 
-const update = async (updatedUser) =>
-  User.update(updatedUser, {
-    returning: true,
-    plain: true,
-  });
+const update = async (id, data) => {
+  const user = await User.findOne({ where: { id } });
+  user.update(data);
+
+  User.findOne({ where: { id } });
+};
 
 const destroy = async (id) =>
   User.destroy({
     where: { id },
   });
 
-const findAll = async () => User.findAll({});
+const all = async (id) => User.findAll({});
 
-const findOne = async (id) =>
-  User.findOne({
+const findOne = async (id) => {
+  return User.findOne({
     where: { id },
     include: [
       {
         model: Department,
-        attributes: { exclude: ['createdAt', 'updatedAt'] },
       },
       {
         model: List,
-        attributes: { exclude: ['createdAt', 'updatedAt'] },
+      },
+      {
+        model: Task,
       },
     ],
   });
+};
 
 module.exports = {
   create,
-  findAll,
+  all,
   findOne,
   destroy,
   update,
