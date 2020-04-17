@@ -1,4 +1,5 @@
 const express = require('express');
+const messagingService = require('../../services/messagingService');
 
 const router = express.Router();
 const listService = require('../../services/listService');
@@ -6,6 +7,8 @@ const listService = require('../../services/listService');
 router.post('/', async (req, res) => {
   try {
     const newList = await listService.create(req.body);
+    const message = `A new :clipboard: template ${newList.name} has been created`;
+    await messagingService.sendMessage(message);
     res.json(newList);
   } catch (e) {
     console.log(e);

@@ -7,7 +7,9 @@ const create = async (data) => {
 
   const newTask = await Task.create({ name, description });
   const listWTask = await List.findOne({ where: { id: ListId } });
-  return listWTask.addTasks(newTask);
+  listWTask.addTasks(newTask);
+
+  return newTask;
 };
 
 const findAll = async () => {
@@ -25,6 +27,7 @@ const findOne = async (data) => {
 const update = async (params, data) => {
   const { id } = params;
   const { userId } = data;
+  console.log(data);
 
   const task = await Task.findOne({
     where: { id },
@@ -39,7 +42,7 @@ const update = async (params, data) => {
       include: [{ model: User }],
     });
   }
-  return task.update(data);
+  task.update(data);
 };
 
 const destroy = async (params) => {
