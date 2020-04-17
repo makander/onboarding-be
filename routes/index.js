@@ -1,6 +1,5 @@
 const express = require('express');
 const passport = require('passport');
-const path = require('path');
 
 const router = express.Router();
 
@@ -9,10 +8,8 @@ const taskController = require('../controllers/api/taskController');
 const departmentController = require('../controllers/api/departmentController');
 const listController = require('../controllers/api/listController');
 const employeeController = require('../controllers/api/employeeController');
-const homeController = require('../controllers/homeController');
 const slackController = require('../controllers/api/slackController');
 
-// router.use('/', homeController);
 
 router.use('/api/user', userController);
 

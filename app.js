@@ -13,6 +13,7 @@ const allowedOrigins = [
   'http://localhost:5000',
   'https://secret-reef-21812.herokuapp.com',
   'https://border-fe.herokuapp.com',
+  'https://border-fe.herokuapp.com',
 ];
 
 const app = express();
