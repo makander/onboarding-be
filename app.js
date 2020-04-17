@@ -10,9 +10,8 @@ const routes = require('./routes');
 require('./config/passport')(passport);
 
 const allowedOrigins = [
-  'http://localhost:5000/',
+  'http://localhost:5000',
   'https://secret-reef-21812.herokuapp.com',
-  'https://zealous-allen-378a4c.netlify.app',
   'https://border-fe.herokuapp.com',
 ];
 

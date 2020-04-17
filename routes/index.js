@@ -12,7 +12,7 @@ const employeeController = require('../controllers/api/employeeController');
 const homeController = require('../controllers/homeController');
 const slackController = require('../controllers/api/slackController');
 
-router.use('/', homeController);
+// router.use('/', homeController);
 
 router.use('/api/user', userController);
 
