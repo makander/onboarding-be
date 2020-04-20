@@ -1,58 +1,65 @@
 const express = require('express');
-const messagingService = require('../../services/messagingService');
+const messageService = require('../../services/messageService');
+const messageTemplates = require('../../utils/messages');
 
 const router = express.Router();
 const listService = require('../../services/listService');
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   try {
     const newList = await listService.create(req.body);
-    const message = `A new :clipboard: template ${newList.name} has been created`;
-    await messagingService.sendMessage(message);
     res.json(newList);
+    const message = messageTemplates.createListMessage(newList.name);
+    const email = messageTemplates.createListEmail(newList.name);
+    await messageService.sendMessage(message);
+    await messageService.sendEmail(email);
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const allLists = await listService.all();
     res.json(allLists);
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const list = await listService.findOne(req.params);
     res.json(list);
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const updated = await listService.update(req.params, req.body);
     res.json(updated);
+
+    if (req.body.status) {
+      const list = await listService.findOne(req.params);
+      const message = messageTemplates.updateListStatusMessage(list.name);
+      const email = messageTemplates.updateListStatusEmail(list.name);
+
+      await messageService.sendEmail(email);
+      await messageService.sendMessage(message);
+    }
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     await listService.destroy(req.params);
     res.status(200).send('List deleted');
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 

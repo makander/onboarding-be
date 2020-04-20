@@ -10,7 +10,7 @@ const routes = require('./routes');
 require('./config/passport')(passport);
 
 const allowedOrigins = [
-  'http://localhost:5000',
+  'http://localhost:3000',
   'https://border-fe.herokuapp.com',
   'https://zealous-allen-378a4c.netlify.app',
 ];
@@ -23,6 +23,16 @@ morgan.token('type', (req, res) => req.headers['content-type']);
 /* app.use(bodyParser.urlencoded({
   extended: true,
 })); */
+const errorHandler = (error, request, response, next) => {
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return response.status(400).send({ error: 'malformed id' });
+  }
+  if (error.name === 'ValidationError:') {
+    return response.status(400).toJSON({ error: error.message });
+  }
+
+  next(error);
+};
 
 app.use(
   cors({
@@ -41,25 +51,10 @@ app.use(
   })
 );
 
-const errorHandler = (error, request, response, next) => {
-  console.log(
-    'THIS IS ERRRRRRRRRRRRRRRRRRRRRRRR ORRRR MEEESSAAGE',
-    error.message
-  );
-
-  if (error.name === 'CastError' && error.kind === 'ObjectId') {
-    return response.status(400).send({ error: 'malformed id' });
-  }
-  if (error.name === 'ValidationError:') {
-    return response.status(400).toJSON({ error: error.message });
-  }
-  next(error);
-};
-
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(passport.initialize());
 
-app.use('/', errorHandler, routes);
+app.use('/', routes);
 app.use(errorHandler);
 module.exports = app;

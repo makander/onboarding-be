@@ -2,57 +2,54 @@ const express = require('express');
 
 const router = express.Router();
 const departmentService = require('../../services/departmentService');
+const messageService = require('../../services/messageService');
+const messageTemplates = require('../../utils/messages');
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   try {
     const newDepartment = await departmentService.create(req.body);
     res.json(newDepartment);
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.get('/all', async (req, res) => {
+router.get('/all', async (req, res, next) => {
   try {
     const departments = await departmentService.findAll();
     res.json(departments);
   } catch (e) {
-    console.log(e);
-
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.get('/lists', async (req, res) => {
+router.get('/lists', async (req, res, next) => {
   try {
     const departmentLists = await departmentService.findAllLists(req.user.id);
     res.send(departmentLists);
   } catch (e) {
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const department = await departmentService.findOne(req.params);
     res.json(department);
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.get('/tasks', async (req, res) => {
+router.get('/tasks', async (req, res, next) => {
   try {
     const departmentTasks = await departmentService.findAllTasks(req.params);
     res.json(departmentTasks);
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const updatedDepartment = await departmentService.update(
       req.params,
@@ -60,22 +57,20 @@ router.put('/:id', async (req, res) => {
     );
     res.json(updatedDepartment);
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     await departmentService.destroy(req.params);
     res.status(200).send('Deparment deleted');
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 
-router.delete('/:id/user', async (req, res) => {
+router.delete('/:id/user', async (req, res, next) => {
   try {
     const removedUser = await departmentService.removeUser(
       req.params,
@@ -83,8 +78,7 @@ router.delete('/:id/user', async (req, res) => {
     );
     res.json(removedUser);
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ message: e.message });
+    next(e);
   }
 });
 module.exports = router;
