@@ -14,7 +14,7 @@ require('./config/passport')(passport);
 const allowedOrigins = [
   'http://localhost:3000',
   'https://border-fe.herokuapp.com',
-  'border-fe.netlify.app',
+  'https://border-fe.netlify.app',
 ];
 
 app.use(morgan('tiny', ':type[req]'));
