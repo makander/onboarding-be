@@ -2,15 +2,15 @@ module.exports = (sequelize, DataTypes) => {
   const Employee = sequelize.define('Employee', {
     title: {
       type: DataTypes.STRING,
-      validation: {
+      validate: {
         allowNull: false,
         notEmpty: true,
-        min: 2,
+        len: 2,
       },
     },
     email: {
       type: DataTypes.STRING,
-      validation: {
+      validate: {
         allowNull: false,
         notEmpty: true,
         isEmail: true,
@@ -21,21 +21,21 @@ module.exports = (sequelize, DataTypes) => {
     notes: DataTypes.STRING,
     firstName: {
       type: DataTypes.STRING,
-      validation: {
+      validate: {
         allowNull: false,
         notEmpty: true,
       },
     },
     lastName: {
       type: DataTypes.STRING,
-      validation: {
+      validate: {
         allowNull: false,
         notEmpty: true,
       },
     },
     office: {
       type: DataTypes.STRING,
-      validation: {
+      validate: {
         allowNull: false,
         notEmpty: true,
       },
