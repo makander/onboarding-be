@@ -3,50 +3,43 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define(
-    'User',
-    {
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-          len: 2,
-          notNull: true,
-        },
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-          len: 2,
-          notNull: true,
-        },
-      },
-      password: {
-        type: DataTypes.STRING,
-        unique: true,
-        validate: {
-          len: [5, 32],
-        },
-      },
-      email: {
-        type: DataTypes.STRING,
-        unique: true,
-        validate: { isEmail: true },
-      },
-      admin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+  const User = sequelize.define('User', {
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [2, 32],
       },
     },
-    {
-      defaultScope: {
-        attributes: { exclude: ['password'] },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [2, 32],
       },
-    }
-  );
+    },
+    password: {
+      type: DataTypes.STRING,
+      unique: true,
+      validate: {
+        len: [6, 32],
+      },
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      validate: {
+        isEmail: true,
+        len: [6, 32],
+      },
+    },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+  });
 
   User.beforeCreate(async (user) => {
     user.password = await bcrypt.hash(user.password, saltRounds);
