@@ -2,8 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 const departmentService = require('../../services/departmentService');
-const messageService = require('../../services/messageService');
-const messageTemplates = require('../../utils/messages');
 
 router.post('/', async (req, res, next) => {
   try {

@@ -8,8 +8,7 @@ const taskController = require('../controllers/api/taskController');
 const departmentController = require('../controllers/api/departmentController');
 const listController = require('../controllers/api/listController');
 const employeeController = require('../controllers/api/employeeController');
-const slackController = require('../controllers/api/slackController');
-
+const notifcationsController = require('../controllers/api/notifcationsController');
 
 router.use('/api/user', userController);
 
@@ -31,7 +30,11 @@ router.use(
   listController
 );
 
-router.use('/api/slack', slackController);
+router.use(
+  '/api/notification',
+  passport.authenticate('jwt', { session: false }),
+  notifcationsController
+);
 
 // router.use('/api/list/:id/task', taskController);
 

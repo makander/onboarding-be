@@ -3,19 +3,25 @@ const express = require('express');
 
 const router = express.Router();
 const employeeService = require('../../services/employeeService');
-const messageService = require('../../services/messageService');
+const emailService = require('../../services/emailService');
 const messageTemplates = require('../../utils/messages');
+const slackService = require('../../services/slackService');
 
 router.post('/', async (req, res, next) => {
   try {
-    const newEmployeeList = await employeeService.create(req.body);
-    const message = messageTemplates.createListEmail(newEmployeeList.name);
-    const slackMesasge = messageTemplates.createListMessage(
-      newEmployeeList.name
-    );
-    await messageService.sendMessage(slackMesasge);
-    await messageService.sendEmail(message);
-    res.send(newEmployeeList);
+    const newList = await employeeService.create(req.body);
+    res.send(newList);
+
+    const recepient = await emailService.findOne();
+    if (recepient) {
+      const email = await messageTemplates.createListEmail(
+        newList.name,
+        recepient.email
+      );
+      await emailService.send(email);
+    }
+    const message = await messageTemplates.createListMessage(newList.name);
+    await slackService.send(message);
   } catch (e) {
     next(e);
   }

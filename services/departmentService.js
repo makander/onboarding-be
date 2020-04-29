@@ -24,10 +24,7 @@ const create = async (data) => {
       where: { id: newDepartment.id },
       include: [
         {
-          model: User,
-          attributes: {
-            exclude: ['createdAt', 'updatedAt', 'role', 'password'],
-          },
+          model: User.scope('withoutPassword'),
         },
       ],
     });
@@ -36,10 +33,7 @@ const create = async (data) => {
     where: { id: newDepartment.id },
     include: [
       {
-        model: User,
-        attributes: {
-          exclude: ['createdAt', 'updatedAt', 'role', 'password'],
-        },
+        model: User.scope('withoutPassword'),
       },
     ],
   });
@@ -51,10 +45,7 @@ const findOne = async (data) => {
     where: { id },
     include: [
       {
-        model: User,
-        attributes: {
-          exclude: ['createdAt', 'updatedAt', 'role', 'password'],
-        },
+        model: User.scope('withoutPassword'),
       },
     ],
   });
@@ -67,7 +58,7 @@ const update = async (params, data) => {
 
   const department = await Department.findOne({
     where: { id },
-    include: User,
+    include: User.scope('withoutPassword'),
   });
 
   if (name.length !== 0) {
@@ -80,7 +71,7 @@ const update = async (params, data) => {
 
   return Department.findOne({
     where: { id: department.id },
-    include: User,
+    include: User.scope('withoutPassword'),
   });
 };
 
@@ -105,7 +96,7 @@ const removeUser = async (params, data) => {
 
   return Department.findOne({
     where: { id },
-    include: User,
+    include: User.scope('withoutPassword'),
   });
 };
 
@@ -114,10 +105,7 @@ const findAllTasks = async (id) => {
     include: [
       { model: List, where: { id } },
       {
-        model: User,
-        attributes: {
-          exclude: ['createdAt', 'updatedAt', 'role', 'password'],
-        },
+        model: User.scope('withoutPassword'),
       },
     ],
   });
@@ -127,7 +115,7 @@ const findAllLists = async (id) => {
   return Department.findAll({
     include: [
       {
-        model: User,
+        model: User.scope('withoutPassword'),
         where: { id },
       },
       {

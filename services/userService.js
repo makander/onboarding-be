@@ -6,7 +6,7 @@ const { Task } = require('../models');
 const create = async (userProps) => User.create(userProps);
 
 const update = async (id, data) => {
-  const user = await User.findOne({ where: { id } });
+  const user = await User.scope('withoutPassword').findOne({ where: { id } });
   user.update(data);
 
   User.findOne({ where: { id } });
@@ -17,10 +17,10 @@ const destroy = async (id) =>
     where: { id },
   });
 
-const all = async (id) => User.findAll({});
+const all = async () => User.scope('withoutPassword').findAll({});
 
 const findOne = async (id) => {
-  return User.findOne({
+  return User.scope('withoutPassword').findOne({
     where: { id },
     include: [
       {

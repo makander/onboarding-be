@@ -20,29 +20,28 @@ const findOne = async (data) => {
   const { id } = data;
   return Task.findOne({
     where: { id },
-    include: [{ model: User }],
+    include: [{ model: User.scope('withoutPassword') }],
   });
 };
 
 const update = async (params, data) => {
   const { id } = params;
   const { userId } = data;
-  console.log(data);
 
   const task = await Task.findOne({
     where: { id },
   });
 
-  if (userId != null) {
+  if (userId != null && userId !== '') {
     const user = await User.findOne({ where: { id: userId } });
     await user.addTasks(task);
 
     return Task.findOne({
       where: { id },
-      include: [{ model: User }],
+      include: [{ model: User.scope('withoutPassword') }],
     });
   }
-  task.update(data);
+  return task.update(data);
 };
 
 const destroy = async (params) => {

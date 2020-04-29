@@ -70,11 +70,11 @@ const all = async () => {
       {
         model: Task,
 
-        include: [{ model: User }],
+        include: [{ model: User.scope('withoutPassword') }],
       },
       {
         model: Department,
-        include: [{ model: User }],
+        include: [{ model: User.scope('withoutPassword') }],
       },
       {
         model: Employee,
@@ -92,11 +92,11 @@ const findOne = async (data) => {
       {
         model: Task,
 
-        include: [{ model: User }],
+        include: [{ model: User.scope('withoutPassword') }],
       },
       {
         model: Department,
-        include: [{ model: User }],
+        include: [{ model: User.scope('withoutPassword') }],
       },
       {
         model: Employee,
@@ -130,11 +130,11 @@ const update = async (params, data) => {
       include: [
         {
           model: Task,
-          include: [{ model: User }],
+          include: [{ model: User.scope('withoutPassword') }],
         },
         {
           model: Department,
-          include: [{ model: User }],
+          include: [{ model: User.scope('withoutPassword') }],
         },
       ],
     });
@@ -163,11 +163,11 @@ const update = async (params, data) => {
     include: [
       {
         model: Task,
-        include: [{ model: User }],
+        include: [{ model: User.scope('withoutPassword') }],
       },
       {
         model: Department,
-        include: [{ model: User }],
+        include: [{ model: User.scope('withoutPassword') }],
       },
     ],
   });

@@ -1,6 +1,7 @@
 const express = require('express');
-const messageService = require('../../services/messageService');
+const emailService = require('../../services/emailService');
 const messageTemplates = require('../../utils/messages');
+const slackService = require('../../services/slackService');
 
 const router = express.Router();
 const listService = require('../../services/listService');
@@ -9,10 +10,15 @@ router.post('/', async (req, res, next) => {
   try {
     const newList = await listService.create(req.body);
     res.json(newList);
+
+    const recepient = await emailService.findOne();
     const message = messageTemplates.createListMessage(newList.name);
-    const email = messageTemplates.createListEmail(newList.name);
-    await messageService.sendMessage(message);
-    await messageService.sendEmail(email);
+    const email = messageTemplates.createListEmail(
+      newList.name,
+      recepient.email
+    );
+    await slackService.send(message);
+    await emailService.send(email);
   } catch (e) {
     next(e);
   }
@@ -43,11 +49,18 @@ router.put('/:id', async (req, res, next) => {
 
     if (req.body.status) {
       const list = await listService.findOne(req.params);
-      const message = messageTemplates.updateListStatusMessage(list.name);
-      const email = messageTemplates.updateListStatusEmail(list.name);
 
-      await messageService.sendEmail(email);
-      await messageService.sendMessage(message);
+      const recepient = await emailService.findOne();
+
+      if (recepient) {
+        const email = messageTemplates.updateListStatusEmail(
+          list.name,
+          recepient.email
+        );
+        await emailService.send(email);
+      }
+      const message = messageTemplates.updateListStatusMessage(list.name);
+      await slackService.send(message);
     }
   } catch (e) {
     next(e);

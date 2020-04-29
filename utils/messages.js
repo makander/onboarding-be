@@ -1,51 +1,55 @@
 // Email messages
+
 const messageSettings = {
   from: 'Border - the onboarding manager',
-  to: process.env.EMAIL_RECEIVER,
   subject: 'Border update',
-  html: '',
 };
 
-const createListEmail = (data) => {
+const createListEmail = async (data, email) => {
   const message = {
     ...messageSettings,
     html: `<p>New list ${data} was created</p>`,
+    to: `${email}`,
   };
 
   return message;
 };
 
-const createTaskEmail = (taskName, listName) => {
+const createTaskEmail = (taskName, listName, email) => {
   const message = {
     ...messageSettings,
     html: `<p>Task ${taskName} has been added to list ${listName}</p>`,
+    to: `${email}`,
   };
 
   return message;
 };
 
-const updateTaskUserEmail = (firstName, lastName, name, listName) => {
+const updateTaskUserEmail = (firstName, lastName, name, listName, email) => {
   const message = {
     ...messageSettings,
     html: ` ${firstName} ${lastName} has been assigned to task ${name} in list ${listName} `,
+    to: `${email}`,
   };
 
   return message;
 };
 
-const updateTaskStatusEmail = (taskName, listName) => {
+const updateTaskStatusEmail = (taskName, listName, email) => {
   const message = {
     ...messageSettings,
     html: `Task ${taskName} in list ${listName} is completed`,
+    to: `${email}`,
   };
 
   return message;
 };
 
-const updateListStatusEmail = (listName) => {
+const updateListStatusEmail = (listName, email) => {
   const message = {
     ...messageSettings,
     html: `${listName} is completed`,
+    to: `${email}`,
   };
 
   return message;
