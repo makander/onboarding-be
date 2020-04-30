@@ -6,9 +6,11 @@ const { Task } = require('../models');
 const create = async (userProps) => User.create(userProps);
 
 const update = async (id, data) => {
-  const user = await User.scope('withoutPassword').findOne({ where: { id } });
-  user.update(data);
-
+  const { firstName, lastName, password, email, admin } = data;
+  if (!password) {
+    const user = await User.findOne({ where: { id } });
+    user.update({ firstName, lastName, email, admin });
+  }
   User.findOne({ where: { id } });
 };
 
