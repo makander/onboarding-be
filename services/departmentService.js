@@ -14,12 +14,12 @@ const findAll = async () => {
 };
 
 const create = async (data) => {
-  const { users, name } = data;
+  const { members, name } = data;
 
   const newDepartment = await Department.create({ name });
 
-  if (users.length != null) {
-    await newDepartment.addUsers(users);
+  if (members.length != null) {
+    await newDepartment.addUsers(members);
     return Department.findOne({
       where: { id: newDepartment.id },
       include: [
