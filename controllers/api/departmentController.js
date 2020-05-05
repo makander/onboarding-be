@@ -38,14 +38,6 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-/* router.get('/tasks', async (req, res, next) => {
-  try {
-    const departmentTasks = await departmentService.findAllTasks(req.params);
-    res.json(departmentTasks);
-  } catch (e) {
-    next(e);
-  }
-}); */
 
 router.put('/:id', async (req, res, next) => {
   try {

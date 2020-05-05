@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+const moment = require('moment');
 const { Department } = require('../models');
 const { User } = require('../models');
 const { List } = require('../models');
@@ -123,7 +125,6 @@ const update = async (params, data) => {
     });
 
     await list.removeDepartment(departmentId);
-    // const updateList = await list.addUsers([user]);
 
     return List.findOne({
       where: { id },
@@ -155,9 +156,6 @@ const update = async (params, data) => {
     await changedList.addDepartment({ addedDepartment });
   }
 
-  /*   if (UserId != null) {
-      await List.removeDepartment({ where: { }});
-  } */
   return List.findOne({
     where: { id },
     include: [
@@ -182,11 +180,26 @@ const destroy = async (data) => {
   });
 };
 
+const findAllNotCompleted = async () => {
+  await List.findAll({
+    where: {
+      [Op.and]: [
+        { templateList: false },
+        { status: false },
+        {
+          startDate: {
+            [Op.lte]: moment().add(3, 'days').toDate(),
+          },
+        },
+      ],
+    },
+  });
+};
 module.exports = {
   create,
   update,
   all,
   findOne,
   destroy,
-  // removeUser,
+  findAllNotCompleted,
 };

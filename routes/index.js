@@ -36,14 +36,10 @@ router.use(
   notifcationsController
 );
 
-// router.use('/api/list/:id/task', taskController);
-
 router.use(
   '/api/employee',
   passport.authenticate('jwt', { session: false }),
   employeeController
 );
-
-// router.use('/api/departments', departmentController);
 
 module.exports = router;

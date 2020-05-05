@@ -1,5 +1,8 @@
 const express = require('express');
-
+const { Op } = require('sequelize');
+const Sequelize = require('sequelize');
+const moment = require('moment');
+const { List } = require('../../models');
 const emailService = require('../../services/emailService');
 const slackService = require('../../services/slackService');
 
@@ -8,11 +11,31 @@ const router = express.Router();
 router.post('/email', async (req, res, next) => {
   try {
     const newClient = await emailService.create(req.body.email);
+
     res.send(newClient);
   } catch (e) {
     next(e);
-    // res.status(500).send({ message: e.message });
   }
+});
+
+router.get('/test', async (req, res, next) => {
+  const lists = await List.findAll({
+    where: {
+      [Op.and]: [
+        { templateList: false },
+        { status: false },
+        {
+          startDate: {
+            [Op.lte]: moment().add(3, 'days').toDate(),
+          },
+        },
+      ],
+    },
+  });
+
+  const formatted = moment(lists[0].startDate).fromNow();
+  console.log(lists[0].startDate);
+  res.send(formatted);
 });
 
 router.get('/email', async (req, res, next) => {
@@ -30,7 +53,6 @@ router.post('/slack', async (req, res, next) => {
     res.send(newClient);
   } catch (e) {
     next(e);
-    // res.status(500).send({ message: e.message });
   }
 });
 

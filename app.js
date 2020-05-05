@@ -5,6 +5,12 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
+const cron = require('node-cron');
+
+const messageTemplates = require('./utils/messages');
+const emailService = require('./services/emailService');
+const slackClient = require('./services/slackService');
+const listService = require('./services/listService');
 
 const app = express();
 
@@ -53,6 +59,36 @@ app.use(
     credentials: true,
   })
 );
+
+cron.schedule('0 3 * * *', async () => {
+  try {
+    console.log('---------');
+    console.log('Starting cron job');
+    console.log('---------');
+    const recepient = await emailService.findOne();
+    const slack = await slackClient.findOne();
+
+    if (recepient || slack) {
+      const lists = await listService.findAllNotCompleted();
+
+      if (lists.length) {
+        // currently doing most notficiations by email so disabling slack reminders for now 
+        console.log('Sending notification mail');
+        lists.forEach(async (list) => {
+          const emailmsg = messageTemplates.scheduleEmail(
+            list.name,
+            recepient.email,
+            list.startDate
+          );
+
+          await emailService.send(emailmsg);
+        });
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
 
 app.use(bodyParser.json());
 app.use(cookieParser());

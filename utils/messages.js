@@ -15,6 +15,16 @@ const createListEmail = async (data, email) => {
   return message;
 };
 
+const scheduleEmail = (listName, email, date) => {
+  const message = {
+    ...messageSettings,
+    html: `<p>${listName} expires in ${date}</p>`,
+    to: `${email}`,
+  };
+
+  return message;
+};
+
 const createTaskEmail = (taskName, listName, email) => {
   const message = {
     ...messageSettings,
@@ -83,4 +93,5 @@ module.exports = {
   createTaskMessasge,
   updateListStatusEmail,
   updateListStatusMessage,
+  scheduleEmail,
 };

@@ -11,7 +11,6 @@ router.post('/register', async (req, res, next) => {
     res.status(200).send('user created');
   } catch (e) {
     next(e);
-    // res.status(500).send({ message: e.message });
   }
 });
 
@@ -29,7 +28,6 @@ router.post(
       res.send({ success: true, user });
     } catch (e) {
       next(e);
-      // res.status(500).send({ message: e.message });
     }
   }
 );

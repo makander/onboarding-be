@@ -17,6 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    startDate: {
+      type: DataTypes.DATE,
+      defaultValue: null,
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      defaultValue: null,
+    },
   });
   List.associate = function (models) {
     // associations can be defined here

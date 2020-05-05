@@ -15,6 +15,8 @@ const create = async (data) => {
     phoneNumber,
     listId,
     office,
+    startDate,
+    endDate,
   } = data;
 
   if (listId !== null && listId !== '') {
@@ -36,6 +38,8 @@ const create = async (data) => {
     const newList = await List.create({
       name: `${template.name} ${firstName} ${lastName}`,
       description: template.description,
+      startDate,
+      endDate,
     });
 
     const newEmployee = await Employee.create({

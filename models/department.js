@@ -10,8 +10,6 @@ module.exports = (sequelize, DataTypes) => {
           len: 2,
         },
       },
-      // userId: DataTypes.INTEGER,
-      // listId: DataTypes.INTEGER,
     },
     {}
   );
