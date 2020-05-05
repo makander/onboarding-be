@@ -187,7 +187,7 @@ const findAllNotCompleted = async () => {
         { templateList: false },
         { status: false },
         {
-          startDate: {
+          date: {
             [Op.lte]: moment().add(3, 'days').toDate(),
           },
         },

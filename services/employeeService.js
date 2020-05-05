@@ -5,6 +5,7 @@ const { Task } = require('../models');
 const { Employee } = require('../models');
 
 const create = async (data) => {
+  console.log(data);
   const {
     firstName,
     lastName,
@@ -15,8 +16,7 @@ const create = async (data) => {
     phoneNumber,
     listId,
     office,
-    startDate,
-    endDate,
+    date,
   } = data;
 
   if (listId !== null && listId !== '') {
@@ -38,8 +38,7 @@ const create = async (data) => {
     const newList = await List.create({
       name: `${template.name} ${firstName} ${lastName}`,
       description: template.description,
-      startDate,
-      endDate,
+      date,
     });
 
     const newEmployee = await Employee.create({
