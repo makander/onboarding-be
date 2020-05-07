@@ -12,13 +12,15 @@ router.post('/', async (req, res, next) => {
     res.json(newList);
 
     const recepient = await emailService.findOne();
-    const message = messageTemplates.createListMessage(newList.name);
-    const email = messageTemplates.createListEmail(
-      newList.name,
-      recepient.email
-    );
-    await slackService.send(message);
-    await emailService.send(email);
+    if (recepient) {
+      const message = messageTemplates.createListMessage(newList.name);
+      const email = messageTemplates.createListEmail(
+        newList.name,
+        recepient.email
+      );
+      await emailService.send(email);
+      await slackService.send(message);
+    }
   } catch (e) {
     next(e);
   }

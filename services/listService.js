@@ -47,7 +47,7 @@ const create = async (data) => {
     return List.findOne({ where: { id: newList.id } });
   }
 
-  if (templateList != null) {
+  if (templateList != null && templateList !== false) {
     const newTemplateList = await List.create({
       name,
       description,
@@ -153,7 +153,7 @@ const update = async (params, data) => {
   });
 
   if (addedDepartment != null) {
-    await changedList.addDepartment({ addedDepartment });
+    await changedList.addDepartment(addedDepartment);
   }
 
   return List.findOne({

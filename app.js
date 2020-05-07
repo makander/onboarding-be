@@ -40,6 +40,13 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).toJSON({ error: error.message });
   }
 
+  if (error.name === 'SequelizeUniqueConstraintError') {
+    if (error.original.code === 'ER_DUP_ENTRY') {
+      return response.status(400).send({ error: 'User aleady exists' });
+    }
+
+    return response.status(400).send('something went wrong');
+  }
   return next(error);
 };
 
@@ -72,7 +79,7 @@ cron.schedule('0 3 * * *', async () => {
       const lists = await listService.findAllNotCompleted();
 
       if (lists.length) {
-        // currently doing most notficiations by email so disabling slack reminders for now 
+        // currently doing most notficiations by email so disabling slack reminders for now
         console.log('Sending notification mail');
         lists.forEach(async (list) => {
           const emailmsg = messageTemplates.scheduleEmail(
