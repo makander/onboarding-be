@@ -25,7 +25,15 @@ router.post(
         maxAge: new Date(Date.now() + 43200000),
         httpOnly: true,
       });
-      res.send({ success: true, user });
+
+      const usr = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        admin: user.admin,
+      };
+
+      res.send({ success: true, usr });
     } catch (e) {
       next(e);
     }

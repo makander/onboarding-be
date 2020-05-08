@@ -8,7 +8,7 @@ const findAll = async () => {
   return Department.findAll({
     attributes: { exclude: ['createdAt', 'updatedAt'] },
     include: {
-      model: User,
+      model: User.scope('withoutPassword'),
     },
   });
 };

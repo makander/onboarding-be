@@ -19,7 +19,14 @@ const destroy = async (id) =>
     where: { id },
   });
 
-const all = async () => User.scope('withoutPassword').findAll({});
+const all = async () =>
+  User.scope('withoutPassword').findAll({
+    include: [
+      {
+        model: Department,
+      },
+    ],
+  });
 
 const findOne = async (id) => {
   return User.scope('withoutPassword').findOne({
