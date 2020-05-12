@@ -7,6 +7,13 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: true,
         len: [2, 32],
+        isUnique(value) {
+          return List.findOne({ where: { name: value } }).then((name) => {
+            if (name) {
+              throw new Error('A list with that name already exists');
+            }
+          });
+        },
       },
     },
     status: {

@@ -5,7 +5,6 @@ const { Task } = require('../models');
 const { Employee } = require('../models');
 
 const create = async (data) => {
-  console.log(data);
   const {
     firstName,
     lastName,
@@ -19,7 +18,7 @@ const create = async (data) => {
     date,
   } = data;
 
-  if (listId !== null && listId !== '') {
+  if (listId != null && listId !== '') {
     const template = await List.findOne({
       where: { id: listId },
       include: [{ model: Department }],

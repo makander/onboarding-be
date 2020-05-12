@@ -36,17 +36,20 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({ error: 'malformed id' });
   }
-  if (error.name === 'ValidationError:') {
-    return response.status(400).toJSON({ error: error.message });
+
+  if (error.name === 'SequelizeValidationError') {
+    console.log(error);
+    return response.status(400).send(error);
   }
 
   if (error.name === 'SequelizeUniqueConstraintError') {
     if (error.original.code === 'ER_DUP_ENTRY') {
-      return response.status(400).send({ error: 'User aleady exists' });
+      return response.status(400).send(error);
     }
 
     return response.status(400).send('something went wrong');
   }
+
   return next(error);
 };
 

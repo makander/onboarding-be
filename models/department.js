@@ -8,6 +8,15 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notEmpty: true,
           len: 2,
+          isUnique(value) {
+            return Department.findOne({ where: { name: value } }).then(
+              (name) => {
+                if (name) {
+                  throw new Error('A department with that name already exists');
+                }
+              }
+            );
+          },
         },
       },
     },

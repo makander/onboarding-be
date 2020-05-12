@@ -10,6 +10,13 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: true,
         isEmail: true,
+        isUnique(value) {
+          return Employee.findOne({ where: { email: value } }).then((email) => {
+            if (email) {
+              throw new Error('A user with that email already exists');
+            }
+          });
+        },
       },
     },
     phoneNumber: DataTypes.STRING,

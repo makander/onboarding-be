@@ -31,10 +31,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       email: {
         type: DataTypes.STRING,
-        unique: true,
         validate: {
           isEmail: true,
           len: [6, 32],
+          isUnique(value) {
+            return User.findOne({ where: { email: value } }).then((email) => {
+              if (email) {
+                throw new Error('A user with that email already exists');
+              }
+            });
+          },
         },
       },
       admin: {

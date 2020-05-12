@@ -9,7 +9,7 @@ const slackService = require('../../services/slackService');
 router.post('/', async (req, res, next) => {
   try {
     const newList = await employeeService.create(req.body);
-    
+
     res.send(newList);
 
     const recepient = await emailService.findOne();
