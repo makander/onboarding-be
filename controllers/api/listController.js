@@ -12,6 +12,7 @@ router.post('/', async (req, res, next) => {
     res.json(newList);
 
     const recepient = await emailService.findOne();
+
     if (recepient) {
       const message = messageTemplates.createListMessage(newList.name);
       const email = messageTemplates.createListEmail(
