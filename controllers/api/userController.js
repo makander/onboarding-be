@@ -24,6 +24,7 @@ router.post(
       res.cookie('borderToken', token, {
         maxAge: new Date(Date.now() + 43200000),
         httpOnly: true,
+        signed: true,
       });
 
       const usr = {
