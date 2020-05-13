@@ -38,7 +38,6 @@ const errorHandler = (error, request, response, next) => {
   }
 
   if (error.name === 'SequelizeValidationError') {
-    console.log(error);
     return response.status(400).send(error);
   }
 

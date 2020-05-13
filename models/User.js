@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: true,
-          len: [2, 32],
         },
       },
       lastName: {
@@ -19,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: true,
-          len: [2, 32],
         },
       },
       password: {
@@ -33,7 +31,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         validate: {
           isEmail: true,
-          len: [6, 32],
           isUnique(value) {
             return User.findOne({ where: { email: value } }).then((email) => {
               if (email) {

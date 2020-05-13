@@ -117,7 +117,7 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-router.delete('/:id/user', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     await taskService.destroy(req.params);
     res.status(200).send('Task deleted');
@@ -125,5 +125,11 @@ router.delete('/:id/user', async (req, res, next) => {
     next(e);
   }
 });
+
+/* router.delete('/:id', async (req, res, next) => {
+  try {
+    await taskService.de
+  }
+} */
 
 module.exports = router;
