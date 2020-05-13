@@ -105,7 +105,7 @@ router.post(
         maxAge: 0,
         httpOnly: true,
       });
-      return res.status(200).end();
+      res.status(200).end();
     } catch (e) {
       next(e);
     }
@@ -117,6 +117,7 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
+      console.log(req);
       const {
         user: { id },
       } = req;
