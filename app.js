@@ -21,6 +21,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://border-fe.herokuapp.com',
   'https://border-fe.netlify.app',
+  'https://border-fe.netlify.app/',
 ];
 
 app.use(morgan('tiny', ':type[req]'));
@@ -69,7 +70,7 @@ app.use(
   })
 );
 
-cron.schedule('0 3 * * *', async () => {
+cron.schedule('*/2 * * * *', async () => {
   try {
     console.log('---------');
     console.log('Starting cron job');
@@ -80,7 +81,7 @@ cron.schedule('0 3 * * *', async () => {
     if (recepient || slack) {
       const lists = await listService.findAllNotCompleted();
 
-      if (lists.length) {
+      if (lists.length !== 0) {
         // currently doing most notficiations by email so disabling slack reminders for now
         console.log('Sending notification mail');
         lists.forEach(async (list) => {
