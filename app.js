@@ -9,7 +9,7 @@ const cron = require('node-cron');
 
 const messageTemplates = require('./utils/messages');
 const emailService = require('./services/emailService');
-const slackClient = require('./services/slackService');
+const slackService = require('./services/slackService');
 const listService = require('./services/listService');
 
 const app = express();
@@ -70,30 +70,42 @@ app.use(
   })
 );
 
-cron.schedule('*/2 * * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
   try {
     console.log('---------');
     console.log('Starting cron job');
     console.log('---------');
     const recepient = await emailService.findOne();
-    const slack = await slackClient.findOne();
+    const slack = await slackService.findOne();
+    const lists = await listService.findAllNotCompleted();
 
-    if (recepient || slack) {
-      const lists = await listService.findAllNotCompleted();
-
-      if (lists.length !== 0) {
+    if (lists != null && lists.length !== 0) {
+      if (recepient != null) {
         // currently doing most notficiations by email so disabling slack reminders for now
         console.log('Sending notification mail');
-        lists.forEach(async (list) => {
+        await lists.forEach((list) => {
           const emailmsg = messageTemplates.scheduleEmail(
             list.name,
             recepient.email,
-            list.startDate
+            list.date
           );
 
-          await emailService.send(emailmsg);
+          emailService.send(emailmsg);
         });
       }
+
+      if (slack != null) {
+        await lists.forEach((list) => {
+          console.log('sending slack message');
+          const notComp = messageTemplates.notCompleteNotification(
+            list.name,
+            list.date
+          );
+          slackService.send(notComp);
+        });
+      }
+    } else {
+      return console.log('No messages to send, exiting');
     }
   } catch (e) {
     console.log(e);

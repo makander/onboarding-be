@@ -181,7 +181,7 @@ const destroy = async (data) => {
 };
 
 const findAllNotCompleted = async () => {
-  await List.findAll({
+  return List.findAll({
     where: {
       [Op.and]: [
         { templateList: false },

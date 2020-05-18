@@ -1,4 +1,5 @@
 // Email messages
+const moment = require('moment');
 
 const messageSettings = {
   from: 'Border - the onboarding manager',
@@ -16,9 +17,10 @@ const createListEmail = async (data, email) => {
 };
 
 const scheduleEmail = (listName, email, date) => {
+  const formated = moment(date).format('YYYY-MM-DD');
   const message = {
     ...messageSettings,
-    html: `<p>${listName} expires in ${date}</p>`,
+    html: `<p>${listName} expires in ${formated}</p>`,
     to: `${email}`,
   };
 
@@ -82,6 +84,11 @@ const createTaskMessasge = (taskName, listName) =>
 const updateListStatusMessage = (listName) =>
   `:clipboard:  ${listName} is completed`;
 
+const notCompleteNotification = (listName, date) => {
+  const formated = moment(date).format('YYYY-MM-DD');
+
+  return `:clipboard:  ${listName} is not finished. It needs to be completeted by ${formated}`;
+};
 module.exports = {
   createListMessage,
   createListEmail,
@@ -94,4 +101,5 @@ module.exports = {
   updateListStatusEmail,
   updateListStatusMessage,
   scheduleEmail,
+  notCompleteNotification,
 };
