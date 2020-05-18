@@ -81,7 +81,6 @@ cron.schedule('0 0 * * *', async () => {
 
     if (lists != null && lists.length !== 0) {
       if (recepient != null) {
-        // currently doing most notficiations by email so disabling slack reminders for now
         console.log('Sending notification mail');
         await lists.forEach((list) => {
           const emailmsg = messageTemplates.scheduleEmail(
@@ -105,7 +104,7 @@ cron.schedule('0 0 * * *', async () => {
         });
       }
     } else {
-      return console.log('No messages to send, exiting');
+      console.log('No messages to send');
     }
   } catch (e) {
     console.log(e);
