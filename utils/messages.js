@@ -24,6 +24,7 @@ const scheduleEmail = (listName, email, date) => {
     to: `${email}`,
   };
 
+  console.log(message);
   return message;
 };
 

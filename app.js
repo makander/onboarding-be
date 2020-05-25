@@ -79,32 +79,32 @@ cron.schedule('0 0 * * *', async () => {
     const slack = await slackService.findOne();
     const lists = await listService.findAllNotCompleted();
 
-    if (lists != null && lists.length !== 0) {
-      if (recepient != null) {
-        console.log('Sending notification mail');
-        await lists.forEach((list) => {
-          const emailmsg = messageTemplates.scheduleEmail(
-            list.name,
-            recepient.email,
-            list.date
-          );
+    if (recepient != null) {
+      console.log('---------');
+      console.log('Sending notification mail');
+      console.log('---------');
+      await lists.forEach((list) => {
+        const emailmsg = messageTemplates.scheduleEmail(
+          list.name,
+          recepient.email,
+          list.date
+        );
 
-          emailService.send(emailmsg);
-        });
-      }
+        emailService.send(emailmsg);
+      });
+    }
 
-      if (slack != null) {
-        await lists.forEach((list) => {
-          console.log('sending slack message');
-          const notComp = messageTemplates.notCompleteNotification(
-            list.name,
-            list.date
-          );
-          slackService.send(notComp);
-        });
-      }
-    } else {
-      console.log('No messages to send');
+    if (slack != null) {
+      await lists.forEach((list) => {
+        console.log('---------');
+        console.log('Sending slack message');
+        console.log('---------');
+        const notComp = messageTemplates.notCompleteNotification(
+          list.name,
+          list.date
+        );
+        slackService.send(notComp);
+      });
     }
   } catch (e) {
     console.log(e);

@@ -48,7 +48,7 @@ router.delete('/email/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     await emailService.destroy(id);
-    res.status(200).send('User deleted');
+    res.status(200).send('service deleted');
   } catch (e) {
     next(e);
   }
