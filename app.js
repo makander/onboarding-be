@@ -69,7 +69,7 @@ app.use(
   })
 );
 
-cron.schedule('0 0 * * *', async () => {
+/* cron.schedule('0 0 * * *', async () => {
   try {
     console.log('---------');
     console.log('Starting cron job');
@@ -108,7 +108,7 @@ cron.schedule('0 0 * * *', async () => {
   } catch (e) {
     console.log(e);
   }
-});
+}); */
 
 app.use(bodyParser.json());
 app.use(cookieParser());
