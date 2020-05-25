@@ -70,7 +70,7 @@ app.use(
   })
 );
 
-schedule.scheduleJob('* * * * *', async () => {
+schedule.scheduleJob('0 5 * * *', async () => {
   try {
     console.log('---------');
     console.log('Starting cron job');
