@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-const cron = require('node-cron');
+const schedule = require('node-schedule');
 
 const messageTemplates = require('./utils/messages');
 const emailService = require('./services/emailService');
@@ -21,6 +21,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://border-fe.herokuapp.com',
   'https://border-fe.netlify.app',
+  'https://border-fe.netlify.app/',
 ];
 
 app.use(morgan('tiny', ':type[req]'));
@@ -69,7 +70,7 @@ app.use(
   })
 );
 
-/* cron.schedule('0 0 * * *', async () => {
+schedule.scheduleJob('* * * * *', async () => {
   try {
     console.log('---------');
     console.log('Starting cron job');
@@ -108,7 +109,7 @@ app.use(
   } catch (e) {
     console.log(e);
   }
-}); */
+});
 
 app.use(bodyParser.json());
 app.use(cookieParser());
